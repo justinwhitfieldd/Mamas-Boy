@@ -8,6 +8,10 @@ public class WanderingSystem : MonoBehaviour
     public float rotationSpeed = 5.0f;
     public float waitTimer = 5.0f;
     public float gravity = 10f;
+    public AudioClip[] alienNoises;
+    public AudioClip alienStepL;
+    public AudioClip alienStepR;
+    public float stepCadence = 1.0f;
 
     private CharacterController characterController;
     private Animator animator;
@@ -15,6 +19,14 @@ public class WanderingSystem : MonoBehaviour
     private GameObject currentPoint;
     private Transform currentTransform;
     private float timer = 0;
+    private AudioSource alienNoise;
+    private float stepTimer = 0;
+    private bool leftFoot = true;
+
+    private void Awake()
+    {
+        alienNoise = GetComponent<AudioSource>();
+    }
 
     void Start()
     {
@@ -31,14 +43,18 @@ public class WanderingSystem : MonoBehaviour
 
         if (atTransform)
         {
-            Debug.Log("Arrived. Waiting before getting new point.");
             if (timer < waitTimer)
                 timer += Time.deltaTime;
             else
             {
+                makeNoise();
                 currentTransform = getNewWanderPoint();
                 timer = 0;
             }
+        }
+        else
+        {
+            makeFootStep();
         }
 
         previousPosition = transform.position; // Update previous position for the next frame
@@ -53,7 +69,7 @@ public class WanderingSystem : MonoBehaviour
 
         if (flatDistanceToTransform > 0.1f)
         {
-            Debug.Log(flatDistanceToTransform);
+            if (stepTimer > stepCadence) Debug.Log(flatDistanceToTransform);
             Vector3 velocity = directionToTransform * speed;
             velocity.y = -gravity * Time.deltaTime;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToTransform.x, 0, directionToTransform.z));
@@ -73,5 +89,34 @@ public class WanderingSystem : MonoBehaviour
         Debug.Log("Getting new point.");
         currentPoint = currentPoint.GetComponent<AccessiblePoints>().getRandomAccessiblePoint();
         return currentPoint.transform;
+    }
+
+    void makeNoise()
+    {
+        Debug.Log("Making noise.");
+        alienNoise.clip = alienNoises[Random.Range(0, alienNoises.Length)];
+        alienNoise.PlayOneShot(alienNoise.clip);
+    }
+
+    void makeFootStep()
+    {
+        if (stepTimer < stepCadence)
+            stepTimer += Time.deltaTime;
+        else
+        {
+            Debug.Log("Making step sound.");
+            if (leftFoot)
+            {
+                alienNoise.clip = alienStepL;
+                leftFoot = false;
+            }
+            else
+            {
+                alienNoise.clip = alienStepR;
+                leftFoot = true;
+            }
+            alienNoise.PlayOneShot(alienNoise.clip);
+            stepTimer = 0;
+        }
     }
 }
