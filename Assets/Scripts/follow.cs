@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public GameObject wanderPoints;
+    public GameObject startingPoint;
     public float speed = 1.0f;
     public float rotationSpeed = 5.0f;
     public float waitTimer = 5.0f;
@@ -12,6 +12,7 @@ public class EnemyMovement : MonoBehaviour
     private CharacterController characterController;
     private Animator animator;
     private Vector3 previousPosition;
+    private GameObject currentPoint;
     private Transform currentTransform;
     private float timer = 0;
 
@@ -20,7 +21,8 @@ public class EnemyMovement : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         previousPosition = transform.position;
-        currentTransform = getNewWanderPoint();
+        currentPoint = startingPoint;
+        currentTransform = currentPoint.transform;
     }
 
     void Update()
@@ -69,6 +71,7 @@ public class EnemyMovement : MonoBehaviour
     Transform getNewWanderPoint()
     {
         Debug.Log("Getting new point.");
-        return wanderPoints.transform.GetChild(Random.Range(0, wanderPoints.transform.childCount));
+        currentPoint = currentPoint.GetComponent<AccessiblePoints>().getRandomAccessiblePoint();
+        return currentPoint.transform;
     }
 }
