@@ -1,38 +1,74 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public Transform player;
-    public float speed = 5.0f;
+    public GameObject wanderPoints;
+    public float speed = 1.0f;
     public float rotationSpeed = 5.0f;
+    public float waitTimer = 5.0f;
+    public float gravity = 10f;
 
     private CharacterController characterController;
     private Animator animator;
     private Vector3 previousPosition;
+    private Transform currentTransform;
+    private float timer = 0;
 
     void Start()
     {
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         previousPosition = transform.position;
+        currentTransform = getNewWanderPoint();
     }
 
     void Update()
     {
-        Vector3 directionToPlayer = (player.position - transform.position).normalized;
-        float distance = Vector3.Distance(player.position, transform.position);
+        bool atTransform = moveToTransform(currentTransform);
 
-        if (distance > 0.1f)
+        if (atTransform)
         {
-            Vector3 velocity = directionToPlayer * speed;
-            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToPlayer.x, 0, directionToPlayer.z));
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
-            characterController.Move(velocity * Time.deltaTime);
+            Debug.Log("Arrived. Waiting before getting new point.");
+            if (timer < waitTimer)
+                timer += Time.deltaTime;
+            else
+            {
+                currentTransform = getNewWanderPoint();
+                timer = 0;
+            }
         }
 
-        // Check if the enemy has moved since last frame
-    bool isWalking = distance > 0.1f && directionToPlayer.magnitude > 0;
-    animator.SetBool("Walking", isWalking);
         previousPosition = transform.position; // Update previous position for the next frame
+    }
+
+    bool moveToTransform(Transform transfromToMove)
+    {
+        Vector3 directionToTransform = (transfromToMove.position - transform.position).normalized;
+        Vector2 flatPosition = new Vector2(transform.position.x, transform.position.z);
+        Vector2 flatTransformToMove = new Vector2(transfromToMove.position.x, transfromToMove.position.z);
+        float flatDistanceToTransform = Vector2.Distance(flatTransformToMove, flatPosition);
+
+        if (flatDistanceToTransform > 0.1f)
+        {
+            Debug.Log(flatDistanceToTransform);
+            Vector3 velocity = directionToTransform * speed;
+            velocity.y = -gravity * Time.deltaTime;
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToTransform.x, 0, directionToTransform.z));
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+            characterController.Move(velocity * Time.deltaTime);
+            animator.SetBool("Walking", (directionToTransform.magnitude > 0));
+            return false;
+        }
+
+        animator.SetBool("Walking", false);
+
+        return true;
+    }
+
+    Transform getNewWanderPoint()
+    {
+        Debug.Log("Getting new point.");
+        return wanderPoints.transform.GetChild(Random.Range(0, wanderPoints.transform.childCount));
     }
 }
