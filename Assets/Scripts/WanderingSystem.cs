@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class EnemyMovement : MonoBehaviour
+public class WanderingSystem : MonoBehaviour
 {
     public GameObject startingPoint;
     public float speed = 1.0f;
