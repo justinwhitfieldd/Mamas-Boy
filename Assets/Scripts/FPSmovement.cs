@@ -22,18 +22,32 @@ public class FPSController : MonoBehaviour
  
     public bool canMove = true;
  
-    
+    public void EnableFPSControl(bool enable)
+    {
+        canMove = enable;
+        playerCamera.gameObject.SetActive(enable);
+    }
+    public void UpdateCameraReference(Camera newCamera)
+    {
+        playerCamera = newCamera;
+        // If you have any additional setup for the new camera, do it here
+    }
     CharacterController characterController;
     void Start()
     {
         characterController = GetComponent<CharacterController>();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
  
     void Update()
     {
- 
+        if(canMove)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        } else {
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = false;
+        }
         #region Handles Movment
         Vector3 forward = transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);

@@ -1,0 +1,56 @@
+.bar {
+}
+
+.unity-progress-bar__container {
+    min-height: 30px;
+    height: 30px;
+}
+
+.unity-progress-bar__background {
+    border-radius: 5px;
+    background-color: rgb(104, 119, 180);
+}
+
+.unity-progress-bar__progress {
+    background: linear-gradient(to right, red, green);
+}
+
+.item {
+}
+
+.item:hover {
+    background-color: rgb(188, 79, 68);
+    cursor: url('project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-1304905567622442630&guid=f80a067f246b34240881c523db89fa8d&type=3#arrow-down@2x');
+}
+
+.icon {
+    flex-grow: 1;
+    width: 94%;
+    height: 10%;
+    background-color: rgb(33, 37, 88);
+    border-left-color: rgb(24, 27, 43);
+    border-right-color: rgb(24, 27, 43);
+    border-top-color: rgb(24, 27, 43);
+    border-bottom-color: rgb(24, 27, 43);
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+    cursor: initial;
+}
+
+.icon:hover {
+    flex-grow: 1;
+    width: 94%;
+    height: 10%;
+    background-color: rgb(74, 79, 143);
+    border-left-color: rgb(24, 27, 43);
+    border-right-color: rgb(24, 27, 43);
+    border-top-color: rgb(24, 27, 43);
+    border-bottom-color: rgb(24, 27, 43);
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+    cursor: url('project://database/Assets/UI%20Toolkit/UnityThemes/UnityDefaultRuntimeTheme.tss?fileID=-1304905567622442630&guid=f80a067f246b34240881c523db89fa8d&type=3#arrow-down@2x');
+}
