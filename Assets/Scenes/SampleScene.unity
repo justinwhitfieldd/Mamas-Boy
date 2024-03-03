@@ -1216,7 +1216,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 319f7447a03e31f449e996ce23c22b6c, type: 3}
       propertyPath: m_Name
-      value: pleasework
+      value: alien_body
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -1893,7 +1893,7 @@ GameObject:
   - component: {fileID: 1845978608}
   - component: {fileID: 1845978612}
   m_Layer: 0
-  m_Name: mother
+  m_Name: Alien
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1911,6 +1911,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 960055ae570dafe47a53d65e8508dd4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 37925558}
+  jumpScareRadius: 1
+  jumpScareSound: {fileID: 8300000, guid: 90193aea4420fd64b97a422f3d4e665a, type: 3}
+  ambienceSystem: {fileID: 916115414}
   startingPoint: {fileID: 176880116}
   speed: 2
   rotationSpeed: 5

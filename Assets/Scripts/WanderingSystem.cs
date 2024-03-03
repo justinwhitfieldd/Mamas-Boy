@@ -1,8 +1,13 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class WanderingSystem : MonoBehaviour
 {
+    public GameObject player;
+    public float jumpScareRadius = 3.0f;
+    public AudioClip jumpScareSound;
+    public GameObject ambienceSystem;
     public GameObject startingPoint;
     public float speed = 1.0f;
     public float rotationSpeed = 5.0f;
@@ -22,14 +27,12 @@ public class WanderingSystem : MonoBehaviour
     private AudioSource alienNoise;
     private float stepTimer = 0;
     private bool leftFoot = true;
-
-    private void Awake()
-    {
-        alienNoise = GetComponent<AudioSource>();
-    }
+    private bool jumpScared = false;
+    private float jumpScareRotationSpeed = 25.0f;
 
     void Start()
     {
+        alienNoise = GetComponent<AudioSource>();
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         previousPosition = transform.position;
@@ -39,6 +42,32 @@ public class WanderingSystem : MonoBehaviour
 
     void Update()
     {
+        float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+
+        if (distanceToPlayer < jumpScareRadius)
+        {
+            ambienceSystem.SetActive(false);
+            animator.SetBool("Walking", false);
+
+            FPSController playerFPSController = player.GetComponent<FPSController>();
+            playerFPSController.canMove = false;
+
+            Quaternion playerRotation = Quaternion.LookRotation(transform.position - player.transform.position);
+            player.transform.rotation = Quaternion.Lerp(player.transform.rotation, playerRotation, Time.deltaTime * jumpScareRotationSpeed);
+
+            Quaternion alienRotation = Quaternion.LookRotation(player.transform.position - transform.position);
+            transform.rotation = Quaternion.Lerp(transform.rotation, alienRotation, Time.deltaTime * jumpScareRotationSpeed);
+
+            if (!jumpScared)
+            {
+                alienNoise.clip = jumpScareSound;
+                alienNoise.PlayOneShot(alienNoise.clip);
+                jumpScared = true;
+            }
+
+            return;
+        }
+
         bool atTransform = moveToTransform(currentTransform);
 
         if (atTransform)
