@@ -1,6 +1,5 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.GraphicsBuffer;
+using System.Collections.Generic;
 
 public class WanderingSystem : MonoBehaviour
 {
@@ -13,7 +12,7 @@ public class WanderingSystem : MonoBehaviour
     public GameObject ambienceSystem;
     public GameObject startingPoint;
     public float rotationSpeed = 5.0f;
-    public float waitTimer = 5.0f;
+    public float waitTimer = 1.0f;
     public float gravity = 10f;
     public AudioClip[] alienNoises;
     public AudioClip alienStepL;
@@ -23,7 +22,6 @@ public class WanderingSystem : MonoBehaviour
 
     private CharacterController characterController;
     private Animator animator;
-    private Vector3 previousPosition;
     private GameObject currentPoint;
     private Transform currentTransform;
     private float timer = 0;
@@ -41,7 +39,6 @@ public class WanderingSystem : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         playerFPSController = player.GetComponent<FPSController>();
-        previousPosition = transform.position;
         currentPoint = startingPoint;
         currentTransform = currentPoint.transform;
     }
@@ -101,7 +98,7 @@ public class WanderingSystem : MonoBehaviour
         #endregion
 
         #region Handles Wandering to Points
-        bool atTransform = moveToTransform(currentTransform, playerFPSController.walkSpeed / 3);
+        bool atTransform = moveToTransform(currentTransform, playerFPSController.walkSpeed);
 
         if (atTransform)
         {
@@ -119,8 +116,6 @@ public class WanderingSystem : MonoBehaviour
             makeFootStep(stepCadence);
         }
         #endregion
-
-        previousPosition = transform.position;
     }
 
     bool moveToTransform(Transform transfromToMove, float speed)
