@@ -6,10 +6,11 @@ public class SkillBarMove : MonoBehaviour
 {
     [SerializeField] private Camera mainCamera;
     private float speed = 0.45f; // speed of movement
-    [SerializeField] private float distanceFromCamera = 5f; // Distance in front of the camera where the object spawns and moves
-    [SerializeField] private float leftOffset = 1f;
+    [SerializeField] private float distanceFromCamera = 0.31f; // Distance in front of the camera where the object spawns and moves
+    [SerializeField] private float leftOffset = 0.17f;
     private float SkillTime = 0f;
     public bool taskFailed = false;
+    private bool lateFlag = true;
 
     // Call this method to start the appearance and disappearance coroutine
     // Call this method to start the appearance and disappearance coroutine
@@ -40,7 +41,7 @@ public class SkillBarMove : MonoBehaviour
         }
 
         // Calculate the position where the object should disappear
-        float disappearPosition = transform.position.x + 0.345f;
+        float disappearPosition = 0.345f;
 
         // Move the object to the right over the specified duration
         while (true)
@@ -52,10 +53,12 @@ public class SkillBarMove : MonoBehaviour
                 if ((SkillTime > 0.236) && (SkillTime < 0.277))
                 {
                     taskFailed = false; // Task successful
+                    lateFlag = false;
                 }
                 else
                 {
                     taskFailed = true; // Task failed
+                    lateFlag = true;
                 }
 
                 Debug.Log("(Window Size: " + (0.236) + ", " + 0.277 + ")");
@@ -73,8 +76,13 @@ public class SkillBarMove : MonoBehaviour
             SkillTime += speed * Time.deltaTime;
 
             // Check if the object has reached the disappear position
-            if (transform.position.x >= disappearPosition)
+            if (SkillTime >= disappearPosition)
             {
+                if (lateFlag)
+                {
+                    taskFailed = true;
+                }
+
                 // Deactivate the object after the movement is complete
                 gameObject.SetActive(false);
                 yield break; // Exit the coroutine
@@ -88,6 +96,7 @@ public class SkillBarMove : MonoBehaviour
     public IEnumerator WaitForCompletion()
     {
         taskFailed = false;
+        lateFlag = true;
         // Wait for the AppearAndDisappear coroutine to finish
         yield return new WaitUntil(() => !gameObject.activeSelf);
 

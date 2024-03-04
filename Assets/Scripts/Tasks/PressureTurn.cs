@@ -17,6 +17,14 @@ public class PressureTurn : MonoBehaviour, IInteractable
     public int Wins = 0;
     [SerializeField] private bool canInteract = true; // Flag to control if interaction is allowed
 
+    [SerializeField] private string _interactionPrompt;
+
+    public string InteractionPrompt
+    {
+        get => _interactionPrompt;
+        set => _interactionPrompt = value;
+    }
+
     private void Start()
     {
         // Find avatar and camera GameObjects by tag
@@ -32,9 +40,6 @@ public class PressureTurn : MonoBehaviour, IInteractable
         GameObject taskSystem = GameObject.FindWithTag("TaskSystem");
         taskCounter = taskSystem.GetComponentInChildren<TaskCounter>();
     }
-    [SerializeField] private string _prompt;
-
-    public string InteractionPrompt => _prompt;
 
     public bool Interact(Interactor inspector)
     {
@@ -86,7 +91,11 @@ public class PressureTurn : MonoBehaviour, IInteractable
 
         if (taskFailed)
         {
-            Debug.Log("You failed the task, try again");
+            _interactionPromptUI.SetUp("Stunned");
+            // Once skill bar movement is done, despawn the background
+            placeInCamera.DespawnforPlayer();
+            yield return new WaitForSeconds(2.5f);
+            _interactionPromptUI.SetUp("Fix Pressure Gauge (E)");
             canInteract = true;
         }
 
@@ -94,12 +103,12 @@ public class PressureTurn : MonoBehaviour, IInteractable
         {
             Debug.Log(" You completed the task");
             _interactionPromptUI.SetUp("Finished!");
+            InteractionPrompt = "Finished!";
             taskCounter.IncrementCounter(); // add 1 to tasks done
             canInteract = false;
+            // Once skill bar movement is done, despawn the background
+            placeInCamera.DespawnforPlayer();
         }
-
-        // Once skill bar movement is done, despawn the background
-        placeInCamera.DespawnforPlayer();
 
         // Restart player movement
         StartFPSmovement();
