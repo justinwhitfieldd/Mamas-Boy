@@ -5,8 +5,6 @@ using UnityEngine;
 public class PlaceInCamera : MonoBehaviour
 {
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private bool followCamera = true;
-    [SerializeField] public bool turnOff = false;
     private Renderer rendererComponent;
     public float distanceFromCamera = 1f;
 
@@ -15,9 +13,9 @@ public class PlaceInCamera : MonoBehaviour
         rendererComponent = GetComponent<Renderer>();
     }
 
-    void Update()
+    public void SpawnforPlayer()
     {
-        if (!followCamera || mainCamera == null)
+        if (mainCamera == null)
             return;
 
         Vector3 cameraPosition = mainCamera.transform.position;
@@ -29,23 +27,17 @@ public class PlaceInCamera : MonoBehaviour
         // Make the object's transform look at the camera's position, but only on the Y-axis
         transform.LookAt(transform.position + mainCamera.transform.rotation * Vector3.forward, mainCamera.transform.rotation * Vector3.up);
 
-        if (turnOff == true)
-        {
-            ToggleVisibility();
-            turnOff = false;
-        }
+        // make visable
+        rendererComponent.enabled = true;
+
     }
 
-    public void ToggleFollowingCamera()
+    public void DespawnforPlayer()
     {
-        followCamera = !followCamera;
+        rendererComponent.enabled = false;
     }
 
-    public void ToggleVisibility()
-    {
-        if (rendererComponent != null)
-            rendererComponent.enabled = !rendererComponent.enabled;
-    }
+   
 }
 
 
