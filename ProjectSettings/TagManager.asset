@@ -8,12 +8,12 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Obstacle
+  - Ship
   - Water
   - UI
   - Interactable
-  - 
-  - 
+  - Wander Points
+  - Alien
   - 
   - 
   - 

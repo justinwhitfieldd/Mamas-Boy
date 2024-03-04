@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public class WanderingSystem : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class WanderingSystem : MonoBehaviour
     public float alienFOV = 25f;
     public float triggerRadius = 2.0f;
     public LayerMask obstacleLayer;
+    public LayerMask alienLayer;
+    public LayerMask wanderPointLayer;
     public AudioClip jumpScareSound;
     public GameObject ambienceSystem;
     public GameObject startingPoint;
@@ -32,6 +35,7 @@ public class WanderingSystem : MonoBehaviour
     private float jumpScareRotationSpeed = 25.0f;
     private FPSController playerFPSController;
     private bool playerSeen = false;
+    private bool screwGravity = false;
 
     void Start()
     {
@@ -46,9 +50,14 @@ public class WanderingSystem : MonoBehaviour
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
+        Vector3 directionToPlayer = player.transform.position - transform.position;
+        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
+
+        RaycastHit hit;
+        bool visible = !Physics.Raycast(transform.position, directionToPlayer.normalized, out hit, distanceToPlayer, obstacleLayer);
 
         #region Handles Jump Scaring Player
-        if (distanceToPlayer < jumpScareRadius)
+        if (visible && (distanceToPlayer < jumpScareRadius))
         {
             ambienceSystem.SetActive(false);
             animator.SetBool("Walking", false);
@@ -73,32 +82,30 @@ public class WanderingSystem : MonoBehaviour
         #endregion
 
         #region Handles Charging to Player
-        Vector3 directionToPlayer = player.transform.position - transform.position;
-        float angleToPlayer = Vector3.Angle(transform.forward, directionToPlayer);
-
-        RaycastHit hit;
-        bool visible = !Physics.Raycast(transform.position, directionToPlayer.normalized, out hit, distanceToPlayer, obstacleLayer);
-
 
         if (visible && ((angleToPlayer < alienFOV) || (distanceToPlayer < triggerRadius)))
         {
-            bool atPlayer = moveToTransform(player.transform, (2 * playerFPSController.runSpeed) / 3);
-            if (!atPlayer) makeFootStep(runCadence);
+            bool atPlayer = MoveToTransform(player.transform, (2 * playerFPSController.runSpeed) / 3);
+            if (!atPlayer) MakeFootStep(runCadence);
 
-            if (!playerSeen) makeNoise();
+            if (!playerSeen) MakeNoise();
             playerSeen = true;
             
             return;
         }
         else
         {
-            if (playerSeen) makeNoise();
+            if (playerSeen)
+            {
+                currentTransform = GetClosestWanderPoint();
+                MakeNoise();
+            }
             playerSeen = false;
         }
         #endregion
 
         #region Handles Wandering to Points
-        bool atTransform = moveToTransform(currentTransform, playerFPSController.walkSpeed);
+        bool atTransform = MoveToTransform(currentTransform, playerFPSController.walkSpeed);
 
         if (atTransform)
         {
@@ -106,19 +113,20 @@ public class WanderingSystem : MonoBehaviour
                 timer += Time.deltaTime;
             else
             {
-                makeNoise();
-                currentTransform = getNewWanderPoint();
+                SetCollision(true);
+                MakeNoise();
+                currentTransform = GetNewWanderPoint();
                 timer = 0;
             }
         }
         else
         {
-            makeFootStep(stepCadence);
+            MakeFootStep(stepCadence);
         }
         #endregion
     }
 
-    bool moveToTransform(Transform transfromToMove, float speed)
+    bool MoveToTransform(Transform transfromToMove, float speed)
     {
         Vector3 directionToTransform = (transfromToMove.position - transform.position).normalized;
         Vector2 flatPosition = new Vector2(transform.position.x, transform.position.z);
@@ -129,7 +137,7 @@ public class WanderingSystem : MonoBehaviour
         {
             if (stepTimer > stepCadence) Debug.Log(flatDistanceToTransform);
             Vector3 velocity = directionToTransform * speed;
-            velocity.y = -gravity * Time.deltaTime;
+            if (!screwGravity) velocity.y = -gravity * Time.deltaTime;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToTransform.x, 0, directionToTransform.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
             characterController.Move(velocity * Time.deltaTime);
@@ -142,21 +150,61 @@ public class WanderingSystem : MonoBehaviour
         return true;
     }
 
-    Transform getNewWanderPoint()
+    Transform GetNewWanderPoint()
     {
         Debug.Log("Getting new point.");
         currentPoint = currentPoint.GetComponent<AccessiblePoints>().getRandomAccessiblePoint();
         return currentPoint.transform;
     }
 
-    void makeNoise()
+    Transform GetClosestWanderPoint()
+    {
+        GameObject[] allWanderPoints = GameObject.FindObjectsOfType<GameObject>().Where(obj => (wanderPointLayer.value & (1 << obj.layer)) != 0).ToArray();
+
+        System.Array.Sort(allWanderPoints, (obj1, obj2) =>
+        {
+            float distanceToObj1 = Vector3.Distance(obj1.transform.position, transform.position);
+            float distanceToObj2 = Vector3.Distance(obj2.transform.position, transform.position);
+
+            return distanceToObj1.CompareTo(distanceToObj2);
+        });
+
+        foreach (GameObject wanderPoint in allWanderPoints)
+        {
+            float distanceToWanderPoint = Vector3.Distance(transform.position, wanderPoint.transform.position);
+            Vector3 directionToWanderPoint = wanderPoint.transform.position - transform.position;
+
+            RaycastHit hit;
+            bool visible = !Physics.Raycast(transform.position, directionToWanderPoint.normalized, out hit, distanceToWanderPoint, obstacleLayer);
+
+            if (visible)
+            {
+                Debug.Log(wanderPoint.name);
+                currentPoint = wanderPoint;
+
+                return wanderPoint.transform;
+            }
+        }
+
+        Debug.LogWarning("No wander points visible! Defaulting to closest non-visible point.");
+        SetCollision(false);
+        return allWanderPoints[0].transform;
+    }
+
+    void SetCollision(bool doCollision)
+    {
+        Physics.IgnoreLayerCollision(GetLayerNumberFromMask(alienLayer), GetLayerNumberFromMask(obstacleLayer), !doCollision);
+        screwGravity = !doCollision;
+    }
+
+    void MakeNoise()
     {
         Debug.Log("Making noise.");
         alienNoise.clip = alienNoises[Random.Range(0, alienNoises.Length)];
         alienNoise.PlayOneShot(alienNoise.clip);
     }
 
-    void makeFootStep(float cadence)
+    void MakeFootStep(float cadence)
     {
         if (stepTimer < cadence)
             stepTimer += Time.deltaTime;
@@ -176,5 +224,21 @@ public class WanderingSystem : MonoBehaviour
             alienNoise.PlayOneShot(alienNoise.clip);
             stepTimer = 0;
         }
+    }
+
+    int GetLayerNumberFromMask(LayerMask layerMask)
+    {
+        int layerIndex = -1;
+
+        for (int i = 0; i < 32; i++)
+        {
+            if ((layerMask.value & (1 << i)) != 0)
+            {
+                layerIndex = i;
+                break;
+            }
+        }
+
+        return layerIndex;
     }
 }

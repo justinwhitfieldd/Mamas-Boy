@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4497669064759218882}
   - component: {fileID: 2824053589203411623}
   - component: {fileID: 743220906948840048}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Wander Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
