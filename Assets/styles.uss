@@ -1,0 +1,59 @@
+.bar {
+}
+
+.unity-progress-bar__container {
+    min-height: 40px;
+    height: 40px;
+}
+
+.unity-progress-bar__background {
+    border-radius: 5px;
+    background-color: rgb(104, 119, 180);
+}
+
+.unity-progress-bar__progress {
+}
+
+.icon {
+    flex-grow: 1;
+    width: 94%;
+    height: 10%;
+    background-color: rgb(33, 37, 88);
+    border-left-color: rgb(24, 27, 43);
+    border-right-color: rgb(24, 27, 43);
+    border-top-color: rgb(24, 27, 43);
+    border-bottom-color: rgb(24, 27, 43);
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+    cursor: initial;
+}
+
+.buttone1 {
+    width: 94%;
+    height: 15%;
+    background-color: rgba(33, 37, 88, 0);
+    border-left-color: rgb(16, 18, 49);
+    border-right-color: rgb(16, 18, 49);
+    border-top-color: rgb(16, 18, 49);
+    border-bottom-color: rgb(16, 18, 49);
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+}
+
+.buttone1:focus {
+    width: 94%;
+    height: 15%;
+    background-color: rgb(68, 73, 141);
+    border-left-color: rgb(16, 18, 49);
+    border-right-color: rgb(16, 18, 49);
+    border-top-color: rgb(16, 18, 49);
+    border-bottom-color: rgb(16, 18, 49);
+    border-top-width: 4px;
+    border-right-width: 4px;
+    border-bottom-width: 4px;
+    border-left-width: 4px;
+}
