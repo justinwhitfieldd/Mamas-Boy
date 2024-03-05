@@ -9,7 +9,14 @@ public class FocusCamOnScreen : MonoBehaviour, IInteractable
     [SerializeField] private Camera focusCamera; // Reference to the new camera you want to switch to
     [SerializeField] private FPSController fpsController; // Manually assign this in the Inspector
 
-    public string InteractionPrompt => _prompt;
+    [SerializeField] private string _interactionPrompt;
+
+    public string InteractionPrompt
+    {
+        get => _interactionPrompt;
+        set => _interactionPrompt = value;
+    }
+
     public bool isFocus = false;
 
     public bool Interact(Interactor interactor)
