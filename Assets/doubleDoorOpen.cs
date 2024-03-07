@@ -1,8 +1,9 @@
 using UnityEngine;
 //stolen from https://www.youtube.com/watch?v=THmW4YolDok
-public class DoorController : MonoBehaviour, IInteractable
+public class doubleDoorController : MonoBehaviour, IInteractable
 {
     public doorOpenClose thedoor;
+    public doorOpenClose thedoor2;
     [SerializeField] private string _interactionPrompt;
 
     public string InteractionPrompt
@@ -15,6 +16,7 @@ public class DoorController : MonoBehaviour, IInteractable
     public bool Interact(Interactor interactor)
     {
         thedoor.toggie();
+        thedoor2.toggie();
         return true;
     }
 }
