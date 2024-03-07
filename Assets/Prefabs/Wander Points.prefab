@@ -568,7 +568,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.data[0]
@@ -578,6 +578,10 @@ PrefabInstance:
       propertyPath: accessiblePoints.Array.data[1]
       value: 
       objectReference: {fileID: 7730973877028052012}
+    - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
+      propertyPath: accessiblePoints.Array.data[2]
+      value: 
+      objectReference: {fileID: 1030034292210058519}
     - target: {fileID: 5158133081113289915, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.581
@@ -896,7 +900,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.data[0]
@@ -906,6 +910,10 @@ PrefabInstance:
       propertyPath: accessiblePoints.Array.data[1]
       value: 
       objectReference: {fileID: 7708729236049018405}
+    - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
+      propertyPath: accessiblePoints.Array.data[2]
+      value: 
+      objectReference: {fileID: 7116072391011306557}
     - target: {fileID: 5158133081113289915, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -10.239
@@ -1947,12 +1955,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.data[0]
       value: 
       objectReference: {fileID: 7708729236049018405}
+    - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
+      propertyPath: accessiblePoints.Array.data[1]
+      value: 
+      objectReference: {fileID: 2037986322339502097}
+    - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
+      propertyPath: accessiblePoints.Array.data[2]
+      value: 
+      objectReference: {fileID: 2967394478807053757}
     - target: {fileID: 5158133081113289915, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -21.85
@@ -2267,12 +2283,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.data[0]
       value: 
       objectReference: {fileID: 2952770543031966983}
+    - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
+      propertyPath: accessiblePoints.Array.data[1]
+      value: 
+      objectReference: {fileID: 4859567770188676570}
     - target: {fileID: 5158133081113289915, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.099999994
@@ -2437,12 +2457,16 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.data[0]
       value: 
       objectReference: {fileID: 773508386801195875}
+    - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
+      propertyPath: accessiblePoints.Array.data[1]
+      value: 
+      objectReference: {fileID: 2502913397760527291}
     - target: {fileID: 5158133081113289915, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.099999994
@@ -3077,7 +3101,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.data[0]
@@ -3087,6 +3111,14 @@ PrefabInstance:
       propertyPath: accessiblePoints.Array.data[1]
       value: 
       objectReference: {fileID: 7730973877028052012}
+    - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
+      propertyPath: accessiblePoints.Array.data[2]
+      value: 
+      objectReference: {fileID: 370122408442293789}
+    - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
+      propertyPath: accessiblePoints.Array.data[3]
+      value: 
+      objectReference: {fileID: 4848329307432672549}
     - target: {fileID: 5158133081113289915, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.099999994
@@ -3222,6 +3254,11 @@ PrefabInstance:
 --- !u!4 &715858625110003992 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5158133081113289915, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
+  m_PrefabInstance: {fileID: 5654941224514500003}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5469461262101357786 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 404493969278996857, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
   m_PrefabInstance: {fileID: 5654941224514500003}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6063586666699809158
@@ -3571,7 +3608,7 @@ PrefabInstance:
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.data[0]
       value: 
-      objectReference: {fileID: 2037986322339502097}
+      objectReference: {fileID: 2967394478807053757}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.data[1]
       value: 
@@ -3803,7 +3840,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.data[0]
@@ -3817,6 +3854,10 @@ PrefabInstance:
       propertyPath: accessiblePoints.Array.data[2]
       value: 
       objectReference: {fileID: 774461703759520923}
+    - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
+      propertyPath: accessiblePoints.Array.data[3]
+      value: 
+      objectReference: {fileID: 5469461262101357786}
     - target: {fileID: 5158133081113289915, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.823654
@@ -4119,7 +4160,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: accessiblePoints.Array.data[0]
@@ -4129,6 +4170,10 @@ PrefabInstance:
       propertyPath: accessiblePoints.Array.data[1]
       value: 
       objectReference: {fileID: 7116072391011306557}
+    - target: {fileID: 743220906948840048, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
+      propertyPath: accessiblePoints.Array.data[2]
+      value: 
+      objectReference: {fileID: 8661916012437015940}
     - target: {fileID: 5158133081113289915, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.77066
@@ -4813,6 +4858,11 @@ PrefabInstance:
 --- !u!4 &4196542391341611078 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5158133081113289915, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
+  m_PrefabInstance: {fileID: 9054561436629081341}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8661916012437015940 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 404493969278996857, guid: 9a823677c49615d458565a1793c2adc8, type: 3}
   m_PrefabInstance: {fileID: 9054561436629081341}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &9067371136260255069
