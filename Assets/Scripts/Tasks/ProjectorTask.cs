@@ -6,15 +6,16 @@ public class ProjectorTask : MonoBehaviour, IInteractable
 {
     // Reference to the FPSMovement script
     public FPSController FPSController;
-    private MultiSkillBarMove multiskillBarMove;
-    private PlaceInCamera placeInCamera;
-    private TaskCounter taskCounter;
-    [SerializeField] private InteractionPromptUI _interactionPromptUI;
+    public MultiSkillBarMove multiskillBarMove;
+    public PlaceInCamera placeInCamera;
+    public TaskCounter taskCounter;
+    [SerializeField] public InteractionPromptUI _interactionPromptUI;
     public bool taskFailed = false;
+    public bool interacting = false;
     [SerializeField] int numWins = 2;
     public int Wins = 0;
     [SerializeField] private bool canInteract = true; // Flag to control if interaction is allowed
-
+    [SerializeField] private float maxInteractDistance = 3f; // Maximum distance for interaction
     [SerializeField] private string _interactionPrompt;
 
     public string InteractionPrompt
@@ -51,6 +52,8 @@ public class ProjectorTask : MonoBehaviour, IInteractable
 
         // Stop player
         StopFPSmovement();
+        _interactionPromptUI.Close();
+        interacting = true;
 
         // Spawn background
         placeInCamera.SpawnforPlayer();
@@ -102,7 +105,7 @@ public class ProjectorTask : MonoBehaviour, IInteractable
             Debug.Log(" You completed the task");
             _interactionPromptUI.SetUp("Finished!");
             InteractionPrompt = "Finished!";
-            taskCounter.IncrementCounter(); // add 1 to tasks done
+            taskCounter.IncrementCounter("oxygen"); // add 1 to tasks done
             canInteract = false;
             // Once skill bar movement is done, despawn the background
             placeInCamera.DespawnforPlayer();
@@ -125,4 +128,20 @@ public class ProjectorTask : MonoBehaviour, IInteractable
         if (FPSController != null)
             FPSController.enabled = true;
     }
+    private void Update()
+    {
+        if (Vector3.Distance(FPSController.transform.position, transform.position) < maxInteractDistance && !interacting)
+        {
+            // Hide the UI panel
+            _interactionPromptUI.SetUp("Allign Control Vectors (E)");
+        }
+        // Check if player is too far away
+        if (Vector3.Distance(FPSController.transform.position, transform.position) > maxInteractDistance && interacting)
+        {
+            // Hide the UI panel
+            _interactionPromptUI.Close();
+            interacting = false;
+        }
+    }       
+
 }
