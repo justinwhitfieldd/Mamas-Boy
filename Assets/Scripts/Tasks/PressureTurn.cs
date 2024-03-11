@@ -132,6 +132,8 @@ public class PressureTurn : MonoBehaviour, IInteractable
         {
             // Hide the UI panel
             _interactionPromptUI.SetUp("Fix Pressure Gauge (E)");
+            interacting = true;
+
         }
         // Check if player is too far away
         if (Vector3.Distance(FPSController.transform.position, transform.position) > maxInteractDistance && interacting)
