@@ -2,7 +2,7 @@ using UnityEngine;
 //stolen from https://www.youtube.com/watch?v=THmW4YolDok
 public class DoorController : MonoBehaviour, IInteractable
 {
-    public doorOpenClose thedoor;
+    public DoorOpenClose thedoor;
     [SerializeField] private string _interactionPrompt;
 
     public string InteractionPrompt

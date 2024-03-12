@@ -1,9 +1,9 @@
 using UnityEngine;
 //stolen from https://www.youtube.com/watch?v=THmW4YolDok
-public class doubleDoorController : MonoBehaviour, IInteractable
+public class DoubleDoorController : MonoBehaviour, IInteractable
 {
-    public doorOpenClose thedoor;
-    public doorOpenClose thedoor2;
+    public DoorOpenClose thedoor;
+    public DoorOpenClose thedoor2;
     [SerializeField] private string _interactionPrompt;
 
     public string InteractionPrompt

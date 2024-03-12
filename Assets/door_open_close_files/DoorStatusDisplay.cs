@@ -5,7 +5,7 @@ public class DoorStatusDisplay : MonoBehaviour
     public Material statusMaterial; // Assign in the inspector
     public Texture openTexture; // Assign in the inspector
     public Texture closedTexture; // Assign in the inspector
-    public doorOpenClose door; // Reference to your door script or component that knows the door's state
+    public DoorOpenClose door; // Reference to your door script or component that knows the door's state
     public Color emissionColor = Color.white; // Assign the default emission color in the inspector
 
     private void Update()
