@@ -7,7 +7,8 @@ using Unity.VisualScripting;
 public class WanderingSystem : MonoBehaviour
 {
     public GameObject player;
-    public float jumpScareRadius = 1.0f;
+    public float runSpeed = 2.0f;
+    public float jumpScareRadius = 2.0f;
     public float alienFOV = 25f;
     public float triggerRadius = 8.0f;
     public LayerMask obstacleLayer;
@@ -19,12 +20,10 @@ public class WanderingSystem : MonoBehaviour
     public float rotationSpeed = 5.0f;
     public float waitTimer = 2.5f;
     public float waitProb = 0.25f;
-    public float gravity = 100f;
+    public float gravity = 15f;
     public AudioClip[] alienNoises;
     public AudioClip alienStepL;
     public AudioClip alienStepR;
-    public float stepCadence = 1.0f;
-    public float runCadence = 0.5f;
     public bool disableCollision = false;
 
     private CharacterController characterController;
@@ -33,8 +32,6 @@ public class WanderingSystem : MonoBehaviour
     private Transform currentTransform;
     private float timer = 0;
     private AudioSource alienNoise;
-    private float stepTimer = 0;
-    private bool leftFoot = true;
     private bool jumpScared = false;
     private float jumpScareRotationSpeed = 25.0f;
     private FPSController playerFPSController;
@@ -72,7 +69,7 @@ public class WanderingSystem : MonoBehaviour
         if (visible && (distanceToPlayer < jumpScareRadius))
         {
             ambienceSystem.SetActive(false);
-            animator.SetBool("Walking", false);
+            animator.SetBool("takedown", true);
 
             playerFPSController.canMove = false;
 
@@ -97,8 +94,8 @@ public class WanderingSystem : MonoBehaviour
 
         if (visible && ((angleToPlayer < alienFOV) || (distanceToPlayer < triggerRadius)))
         {
-            bool atPlayer = MoveToTransform(player.transform, (2 * playerFPSController.runSpeed) / 3);
-            if (!atPlayer) MakeFootStep(runCadence);
+            bool atPlayer = MoveToTransform(player.transform, runSpeed);
+            // if (!atPlayer) MakeFootStep(runCadence);
 
             if (!playerSeen) MakeNoise();
             playerSeen = true;
@@ -118,7 +115,7 @@ public class WanderingSystem : MonoBehaviour
 
         #region Handles Wandering to Points
 
-        bool atTransform = MoveToTransform(currentTransform, playerFPSController.walkSpeed);
+        bool atTransform = MoveToTransform(currentTransform, 1f);
 
         if (atTransform)
         {
@@ -140,7 +137,7 @@ public class WanderingSystem : MonoBehaviour
         }
         else
         {
-            MakeFootStep(stepCadence);
+            // MakeFootStep(stepCadence);
         }
         #endregion
     }
@@ -152,13 +149,12 @@ public class WanderingSystem : MonoBehaviour
         Vector2 flatTransformToMove = new Vector2(transfromToMove.position.x, transfromToMove.position.z);
         float flatDistanceToTransform = Vector2.Distance(flatTransformToMove, flatPosition);
 
-        if (flatDistanceToTransform > 0.1f)
+        if (flatDistanceToTransform > 0.5f)
         {
-            Vector3 velocity = directionToTransform * speed;
-            if (!screwGravity) velocity.y = -gravity * Time.deltaTime;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToTransform.x, 0, directionToTransform.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
-            characterController.Move(velocity * Time.deltaTime);
+            if (!screwGravity) characterController.Move(new Vector3(0, -gravity * Time.deltaTime, 0));
+            animator.speed = speed;
             animator.SetBool("Walking", (directionToTransform.magnitude > 0));
             return false;
         }
@@ -231,25 +227,13 @@ public class WanderingSystem : MonoBehaviour
         alienNoise.PlayOneShot(alienNoise.clip);
     }
 
-    void MakeFootStep(float cadence)
+    void MakeFootStep(int isLeft)
     {
-        if (stepTimer < cadence)
-            stepTimer += Time.deltaTime;
+        if (isLeft == 1)
+            alienNoise.clip = alienStepL;
         else
-        {
-            if (leftFoot)
-            {
-                alienNoise.clip = alienStepL;
-                leftFoot = false;
-            }
-            else
-            {
-                alienNoise.clip = alienStepR;
-                leftFoot = true;
-            }
-            alienNoise.PlayOneShot(alienNoise.clip);
-            stepTimer = 0;
-        }
+            alienNoise.clip = alienStepR;
+        alienNoise.PlayOneShot(alienNoise.clip);
     }
 
     int GetLayerNumberFromMask(LayerMask layerMask)
