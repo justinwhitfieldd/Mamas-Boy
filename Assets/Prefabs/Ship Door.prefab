@@ -504,7 +504,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 4748843372165154271}
-  isDoorOpen: 0
+  isDoorOpen: 1
   alien: {fileID: 2001964138031821453, guid: 7ae564a697f0f9b4194247de73808360, type: 3}
 --- !u!64 &4401959938015804669
 MeshCollider:
