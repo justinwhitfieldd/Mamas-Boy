@@ -8,7 +8,9 @@ public class TaskIndicatorManager : MonoBehaviour
 
     // Declare public variables for each task's image
     public Image pressureRegulatorLight;
-    public Image oxygenLight;
+    public Image guidance_light;
+    public GameObject status_bar_guidance;
+    public GameObject status_bar_pressure;
     // Add more public variables for each task's image
 
     // Declare a public variable for the new game object
@@ -22,7 +24,7 @@ public class TaskIndicatorManager : MonoBehaviour
     {
         // Initialize the taskIndicators dictionary with task names and false values
         taskIndicators.Add("pressure_regulator_light", false);
-        taskIndicators.Add("oxygen", false);
+        taskIndicators.Add("guidance", false);
         // Add more tasks as needed
 
         // Fetch the button and image components from the new object prefab
@@ -68,9 +70,11 @@ public class TaskIndicatorManager : MonoBehaviour
         switch (taskName)
         {
             case "pressure_regulator_light":
+                status_bar_pressure.SetActive(true);
                 return pressureRegulatorLight;
-            case "oxygen":
-                return oxygenLight;
+            case "guidance":
+                status_bar_guidance.SetActive(true);
+                return guidance_light;
             // Add more cases for each task
             default:
                 return null;

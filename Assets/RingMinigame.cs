@@ -10,6 +10,7 @@ public class RingMinigame : MonoBehaviour
     public float rotationSpeed2 = 200f;
     public float rotationSpeed3 = 250f;
     public GameObject SuccessIcon;
+    public TaskCounter taskCounter;
 
     public float successThreshold = 10f;
     public Image resultImage;
@@ -35,6 +36,8 @@ public class RingMinigame : MonoBehaviour
     {
         originalColor = resultImage.color;
         originalVectorColor = vector1box.color;
+        GameObject taskSystem = GameObject.FindWithTag("TaskSystem");
+        taskCounter = taskSystem.GetComponentInChildren<TaskCounter>();
         StartGame();
     }
 
@@ -121,6 +124,7 @@ public class RingMinigame : MonoBehaviour
             Mathf.Abs(ring2Rotation - ring3Rotation) <= successThreshold )//&&
             //Mathf.Abs(ring3Rotation - ring1Rotation) <= successThreshold)
         {
+            taskCounter.IncrementCounter("guidance"); // add 1 to tasks done
             EndGame(true);
         }
         else
