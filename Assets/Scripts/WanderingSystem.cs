@@ -25,7 +25,7 @@ public class WanderingSystem : MonoBehaviour
     public AudioClip alienStepL;
     public AudioClip alienStepR;
     public bool disableCollision = false;
-
+    public GameObject alienHead;
     private CharacterController characterController;
     private Animator animator;
     private GameObject currentPoint;
@@ -39,7 +39,8 @@ public class WanderingSystem : MonoBehaviour
     private bool screwGravity = false;
     private int stepCounter = 0;
     private bool isStopping = true;
-
+    public float jumpScareCameraMovementSpeed = 5.0f;
+public bool isEating = false;
     void Start()
     {
         alienNoise = GetComponent<AudioSource>();
@@ -65,19 +66,30 @@ public class WanderingSystem : MonoBehaviour
         RaycastHit hit;
         bool visible = !Physics.Raycast(transform.position, directionToPlayer.normalized, out hit, distanceToPlayer, obstacleLayer);
 
-        #region Handles Jump Scaring Player
-        if (visible && (distanceToPlayer < jumpScareRadius))
+  #region Handles Jump Scaring Player
+        if ((visible && (distanceToPlayer < jumpScareRadius)) || isEating)
         {
             ambienceSystem.SetActive(false);
             animator.SetBool("takedown", true);
 
             playerFPSController.canMove = false;
 
-            Quaternion playerRotation = Quaternion.LookRotation(transform.position - player.transform.position);
-            player.transform.rotation = Quaternion.Lerp(player.transform.rotation, playerRotation, Time.deltaTime * jumpScareRotationSpeed);
+            if (distanceToPlayer <= 1.8f || isEating)
+            {
+                isEating = true;
+                // Smoothly move the player's camera towards the alien's head position and rotation
+                player.GetComponentInChildren<Camera>().transform.position = Vector3.Lerp(
+                    player.GetComponentInChildren<Camera>().transform.position,
+                    alienHead.transform.position,
+                    Time.deltaTime * jumpScareCameraMovementSpeed
+                );
 
-            Quaternion alienRotation = Quaternion.LookRotation(player.transform.position - transform.position);
-            transform.rotation = Quaternion.Lerp(transform.rotation, alienRotation, Time.deltaTime * jumpScareRotationSpeed);
+                player.GetComponentInChildren<Camera>().transform.rotation = Quaternion.Lerp(
+                    player.GetComponentInChildren<Camera>().transform.rotation,
+                    alienHead.transform.rotation,
+                    Time.deltaTime * jumpScareCameraMovementSpeed
+                );
+            }
 
             if (!jumpScared)
             {
