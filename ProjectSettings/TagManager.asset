@@ -6,6 +6,8 @@ TagManager:
   tags:
   - MainCanvas
   - TaskSystem
+  - lesserCanvas1
+  - scrollbar1
   layers:
   - Default
   - TransparentFX

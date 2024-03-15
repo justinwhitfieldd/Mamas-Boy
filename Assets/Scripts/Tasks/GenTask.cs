@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GenTask : MonoBehaviour, IInteractable
 {
@@ -9,10 +10,13 @@ public class GenTask : MonoBehaviour, IInteractable
     private BarFill BarFill;
     private PlaceInCamera placeInCamera;
     private TaskCounter taskCounter;
+    GameObject taskCanvas;
+    [SerializeField] GameObject scrollBar;
     [SerializeField] private InteractionPromptUI _interactionPromptUI;
     public bool taskFailed = false;
     [SerializeField] private bool canInteract = true; // Flag to control if interaction is allowed
-
+    [SerializeField] private AudioSource loseSound;
+    [SerializeField] private AudioSource winSound;
     [SerializeField] private string _interactionPrompt;
 
     public string InteractionPrompt
@@ -29,12 +33,15 @@ public class GenTask : MonoBehaviour, IInteractable
         // Get a reference to the Barfill component attached to a child object
         BarFill = GetComponentInChildren<BarFill>();
         placeInCamera = GetComponentInChildren<PlaceInCamera>();
+        taskCanvas = GameObject.FindWithTag("lesserCanvas1");
+        //taskCanvas.SetActive(false);
         // get player intteract UI
         GameObject canvasObject = GameObject.FindWithTag("MainCanvas");
         _interactionPromptUI = canvasObject.GetComponentInChildren<InteractionPromptUI>();
         // get task counter
         GameObject taskSystem = GameObject.FindWithTag("TaskSystem");
         taskCounter = taskSystem.GetComponentInChildren<TaskCounter>();
+        scrollBar.SetActive(false);
     }
 
     public bool Interact(Interactor inspector)
@@ -48,10 +55,10 @@ public class GenTask : MonoBehaviour, IInteractable
         // Stop player
         StopFPSmovement();
 
-        // Spawn progress bar
+        // Spawn text
         placeInCamera.SpawnforPlayer();
 
-        // Make skill bar move and wait for it to finish
+        // Make progress bar move and wait for it to finish
         StartCoroutine(StartAndFinishProgressBarMove());
 
         return true;
@@ -60,29 +67,36 @@ public class GenTask : MonoBehaviour, IInteractable
     private IEnumerator StartAndFinishProgressBarMove()
     {
 
+        scrollBar.SetActive(true);
+
+
         // Start the skill bar movement
         BarFill.StartAppearAndDisappear();
-
-        Debug.Log("Got here1");
 
         // Wait for the skill bar movement to finish
         yield return StartCoroutine(BarFill.WaitForCompletion());
 
+        //taskCanvas.SetActive(false);
+
         // Get the result of the skill bar movement
         taskFailed = BarFill.taskFailed;
 
+        scrollBar.SetActive(false);
+
         if (taskFailed)
         {
+            loseSound.Play();
             _interactionPromptUI.SetUp("Stunned");
             // Once skill bar movement is done, despawn the background
             placeInCamera.DespawnforPlayer();
             yield return new WaitForSeconds(2.5f);
-            _interactionPromptUI.SetUp("Allign Control Vectors (E)");
+            _interactionPromptUI.SetUp("Restart Backup Power (E)");
             canInteract = true;
         }
 
         else
         {
+            winSound.Play();
             Debug.Log(" You completed the task");
             _interactionPromptUI.SetUp("Finished!");
             InteractionPrompt = "Finished!";

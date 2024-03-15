@@ -14,7 +14,6 @@ public class ProjectorTask : MonoBehaviour, IInteractable
     [SerializeField] int numWins = 2;
     public int Wins = 0;
     [SerializeField] private bool canInteract = true; // Flag to control if interaction is allowed
-
     [SerializeField] private string _interactionPrompt;
 
     public string InteractionPrompt

@@ -16,8 +16,9 @@ public class PressureTurn : MonoBehaviour, IInteractable
     [SerializeField] int numWins = 3;
     public int Wins = 0;
     [SerializeField] private bool canInteract = true; // Flag to control if interaction is allowed
-
     [SerializeField] private string _interactionPrompt;
+    [SerializeField] private AudioSource loseSound;
+    [SerializeField] private AudioSource winSound;
 
     public string InteractionPrompt
     {
@@ -39,6 +40,7 @@ public class PressureTurn : MonoBehaviour, IInteractable
         // get task counter
         GameObject taskSystem = GameObject.FindWithTag("TaskSystem");
         taskCounter = taskSystem.GetComponentInChildren<TaskCounter>();
+
     }
 
     public bool Interact(Interactor inspector)
@@ -81,10 +83,12 @@ public class PressureTurn : MonoBehaviour, IInteractable
 
             if (taskFailed)
             {
+                loseSound.Play();
                 break;
             }
             else
             {
+                winSound.Play();
                 Wins += 1;
             }
         }

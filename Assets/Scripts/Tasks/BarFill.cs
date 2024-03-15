@@ -8,70 +8,46 @@ public class BarFill : MonoBehaviour
     [SerializeField] private Camera mainCamera;
     [SerializeField] private float distanceFromCamera = 0.31f; // Distance in front of the camera where the object spawns and moves
     public bool taskFailed = false;
-    [SerializeField] private float leftOffset = 0.17f;
 
     public Scrollbar scrollbar;
-    public float fillSpeed = 0.5f; // Adjust as needed
+    public float fillTime = 6f; // Adjust as needed
     private bool isFilling = false;
     private bool filledBar = false;
+    private float elapsedTime = 0f;
 
     // Call this method to start the appearance and disappearance coroutine
     // Call this method to start the appearance and disappearance coroutine
+
     public void StartAppearAndDisappear()
     {
-        // Activate the object
-        gameObject.SetActive(true);
-
-        // Start the AppearAndDisappear coroutine
-        StartCoroutine(AppearAndDisappear());
+        elapsedTime = 0f; // Reset elapsed time
+        Debug.Log("Set up");
+        return;
     }
 
-    // Coroutine for the appearance and disappearance of the object
-    private IEnumerator AppearAndDisappear()
+    private void Update()
     {
+        isFilling = Input.GetKey(KeyCode.E);
 
-        // Set the initial position of the object in front of the camera
-        if (mainCamera != null)
+        // Fill the scrollbar if isFilling is true and the scrollbar is not filled
+        if (isFilling && !filledBar)
         {
-            Vector3 cameraPosition = mainCamera.transform.position;
-            Vector3 cameraForward = mainCamera.transform.forward;
-            Vector3 spawnPosition = cameraPosition + cameraForward * distanceFromCamera - (mainCamera.transform.right * leftOffset);
-            transform.position = spawnPosition;
-            transform.LookAt(transform.position + mainCamera.transform.rotation * Vector3.forward, mainCamera.transform.rotation * Vector3.up);
+            Debug.Log("we fill");
+            FillScrollbar();
         }
 
-        // Move the object to the right over the specified duration
-        while (true)
+        if (filledBar)
         {
-            Debug.Log("Got here");
-            if (Input.GetKey(KeyCode.E))
-            {
-                isFilling = true;
-            }
+            Debug.Log("bingo");
+            taskFailed = false;
+            gameObject.SetActive(false); // Deactivate the object
+        }
 
-            else
-            {
-                isFilling = false;
-            }
-
-            if (isFilling)
-            {
-                FillScrollbar();
-            }
-
-            else
-            {
-                taskFailed = true;
-                gameObject.SetActive(false); // Deactivate the object
-                yield break;
-            }
-
-            if (filledBar == true)
-            {
-                taskFailed = false;
-                yield break;
-            }
-
+        if (!isFilling)
+        {
+            Debug.Log("not here");
+            taskFailed = true;
+            gameObject.SetActive(false); // Deactivate the object
         }
     }
 
@@ -84,13 +60,20 @@ public class BarFill : MonoBehaviour
 
     }
 
-    void FillScrollbar()
+    private void FillScrollbar()
     {
-        if (scrollbar.size < 1f)
-        {
-            scrollbar.size += fillSpeed * Time.deltaTime;
-        }
-        else
+        // Increment elapsed time
+        elapsedTime += Time.deltaTime;
+
+        // Calculate the fill amount based on the elapsed time
+        float fillAmount = Mathf.Clamp01(elapsedTime / fillTime); // Fill over 20 seconds
+
+        // Update the scrollbar size
+        scrollbar.size = fillAmount;
+        Debug.Log("fill amount " + fillAmount.ToString());
+
+        // Check if the scrollbar is filled
+        if (fillAmount >= 1f)
         {
             filledBar = true;
         }

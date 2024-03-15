@@ -8,6 +8,9 @@ public class MultiSkillBarMove : MonoBehaviour
     private float speed = 0.45f; // speed of movement
     [SerializeField] private float distanceFromCamera = 0.31f; // Distance in front of the camera where the object spawns and moves
     [SerializeField] private float leftOffset = 0.17f;
+    [SerializeField] private AudioSource loseSound;
+    [SerializeField] private AudioSource winSound;
+
     private float SkillTime = 0f;
     public bool taskFailed = false;
     private float specialTracker = 4.73f;
@@ -63,13 +66,13 @@ public class MultiSkillBarMove : MonoBehaviour
                 }
 
                 // 2nd hit
-                if ((SkillTime > 0.22) && (SkillTime < 0.25))
+                else if ((SkillTime > 0.22) && (SkillTime < 0.25))
                 {
                     specialCount += 0.7f;
                 }
                 
                 // 3rd hit
-                if ((SkillTime > 0.28) && (SkillTime < 0.31))
+                else if ((SkillTime > 0.28) && (SkillTime < 0.31))
                 {
                     specialCount += 0.03f;
 
@@ -86,12 +89,18 @@ public class MultiSkillBarMove : MonoBehaviour
 
                     else
                     {
+                        winSound.Play();
                         lateFlag = false;
                     }
 
                     // Deactivate the object after the movement is complete
                     gameObject.SetActive(false);
                     yield break; // Exit the coroutine
+                }
+
+                else
+                {
+                    loseSound.Play();
                 }
 
 
