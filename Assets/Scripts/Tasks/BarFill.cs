@@ -31,20 +31,17 @@ public class BarFill : MonoBehaviour
         // Fill the scrollbar if isFilling is true and the scrollbar is not filled
         if (isFilling && !filledBar)
         {
-            Debug.Log("we fill");
             FillScrollbar();
         }
 
         if (filledBar)
         {
-            Debug.Log("bingo");
             taskFailed = false;
             gameObject.SetActive(false); // Deactivate the object
         }
 
         if (!isFilling)
         {
-            Debug.Log("not here");
             taskFailed = true;
             gameObject.SetActive(false); // Deactivate the object
         }
@@ -69,7 +66,6 @@ public class BarFill : MonoBehaviour
 
         // Update the scrollbar size
         scrollbar.size = fillAmount;
-        Debug.Log("fill amount " + fillAmount.ToString());
 
         // Check if the scrollbar is filled
         if (fillAmount >= 1f)

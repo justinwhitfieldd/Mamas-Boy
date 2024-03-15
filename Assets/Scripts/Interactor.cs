@@ -25,7 +25,6 @@ public class Interactor : MonoBehaviour
             {
 
                 //if (!_interactionPromptUI.IsDisplayed) _interactionPromptUI.SetUp(_interactable.InteractionPrompt);
-
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     _interactable.Interact(this);

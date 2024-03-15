@@ -17,7 +17,8 @@ public class PressureTurn : MonoBehaviour, IInteractable
     public int Wins = 0;
     [SerializeField] private bool canInteract = true; // Flag to control if interaction is allowed
     [SerializeField] private float maxInteractDistance = 4f; // Maximum distance for interaction
-
+    [SerializeField] private AudioSource loseSound;
+    [SerializeField] private AudioSource winSound;
     [SerializeField] private string _interactionPrompt;
 
     public string InteractionPrompt
@@ -80,10 +81,12 @@ public class PressureTurn : MonoBehaviour, IInteractable
 
             if (taskFailed)
             {
+                loseSound.Play();
                 break;
             }
             else
             {
+                winSound.Play();
                 Wins += 1;
             }
         }
@@ -130,9 +133,17 @@ public class PressureTurn : MonoBehaviour, IInteractable
     {
         if (Vector3.Distance(FPSController.transform.position, transform.position) < maxInteractDistance && !interacting)
         {
-            // Hide the UI panel
-            _interactionPromptUI.SetUp("Fix Pressure Gauge (E)");
-            interacting = true;
+            if (canInteract)
+            {
+                // Hide the UI panel
+                _interactionPromptUI.SetUp("Fix Pressure Gauge (E)");
+                interacting = true;
+            }
+
+            else
+            {
+                _interactionPromptUI.SetUp("Finished!");
+            }
 
         }
         // Check if player is too far away

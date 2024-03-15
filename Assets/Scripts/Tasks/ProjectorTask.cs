@@ -132,9 +132,16 @@ public class ProjectorTask : MonoBehaviour, IInteractable
     {
         if (Vector3.Distance(FPSController.transform.position, transform.position) < maxInteractDistance && !interacting)
         {
-            // Hide the UI panel
-            _interactionPromptUI.SetUp("Allign Control Vectors (E)");
-            interacting = true;
+            if (canInteract)
+            {
+                // Hide the UI panel
+                _interactionPromptUI.SetUp("Allign Control Vectors (E)");
+                interacting = true;
+            }
+            else
+            {
+                _interactionPromptUI.SetUp("Finished!");
+            }
         }
         // Check if player is too far away
         if (Vector3.Distance(FPSController.transform.position, transform.position) > maxInteractDistance && interacting)

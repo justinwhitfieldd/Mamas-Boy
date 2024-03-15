@@ -580,11 +580,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   FPSController: {fileID: 0}
+  skillBarMove: {fileID: 0}
+  placeInCamera: {fileID: 0}
+  taskCounter: {fileID: 0}
   _interactionPromptUI: {fileID: 0}
   taskFailed: 0
+  interacting: 0
   numWins: 3
   Wins: 0
   canInteract: 1
-  _interactionPrompt: Fix Pressure Gauge (E)
+  maxInteractDistance: 6
   loseSound: {fileID: 441026135748413055}
   winSound: {fileID: 6655442074555828899}
+  _interactionPrompt: Fix Pressure Gauge (E)

@@ -10,7 +10,6 @@ public class GenTask : MonoBehaviour, IInteractable
     private BarFill BarFill;
     private PlaceInCamera placeInCamera;
     private TaskCounter taskCounter;
-    GameObject taskCanvas;
     [SerializeField] GameObject scrollBar;
     [SerializeField] private InteractionPromptUI _interactionPromptUI;
     public bool taskFailed = false;
@@ -35,8 +34,6 @@ public class GenTask : MonoBehaviour, IInteractable
         // Get a reference to the Barfill component attached to a child object
         BarFill = GetComponentInChildren<BarFill>();
         placeInCamera = GetComponentInChildren<PlaceInCamera>();
-        taskCanvas = GameObject.FindWithTag("lesserCanvas1");
-        //taskCanvas.SetActive(false);
         // get player intteract UI
         GameObject canvasObject = GameObject.FindWithTag("MainCanvas");
         _interactionPromptUI = canvasObject.GetComponentInChildren<InteractionPromptUI>();
@@ -71,19 +68,14 @@ public class GenTask : MonoBehaviour, IInteractable
 
         scrollBar.SetActive(true);
 
-
         // Start the skill bar movement
         BarFill.StartAppearAndDisappear();
 
         // Wait for the skill bar movement to finish
         yield return StartCoroutine(BarFill.WaitForCompletion());
 
-        //taskCanvas.SetActive(false);
-
         // Get the result of the skill bar movement
         taskFailed = BarFill.taskFailed;
-
-        scrollBar.SetActive(false);
 
         if (taskFailed)
         {
@@ -130,9 +122,17 @@ public class GenTask : MonoBehaviour, IInteractable
     {
         if (Vector3.Distance(FPSController.transform.position, transform.position) < maxInteractDistance && !interacting)
         {
-            // Hide the UI panel
-            _interactionPromptUI.SetUp("Allign Control Vectors (E)");
-            interacting = true;
+            if (canInteract)
+            {
+                // Hide the UI panel
+                _interactionPromptUI.SetUp("Restart Backup Generator (E)");
+                interacting = true;
+            }
+
+            else
+            {
+                _interactionPromptUI.SetUp("Finished!");
+            }
         }
         // Check if player is too far away
         if (Vector3.Distance(FPSController.transform.position, transform.position) > maxInteractDistance && interacting)
