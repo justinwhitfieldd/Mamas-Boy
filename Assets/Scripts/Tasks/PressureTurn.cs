@@ -7,10 +7,10 @@ public class PressureTurn : MonoBehaviour, IInteractable
 {
     // Reference to the FPSMovement script
     public FPSController FPSController;
-    public SkillBarMove skillBarMove;
-    public PlaceInCamera placeInCamera;
-    public TaskCounter taskCounter;
-    [SerializeField] public InteractionPromptUI _interactionPromptUI;
+    private SkillBarMove skillBarMove;
+    private PlaceInCamera placeInCamera;
+    private TaskCounter taskCounter;
+    [SerializeField] private InteractionPromptUI _interactionPromptUI;
     public bool taskFailed = false;
     public bool interacting = false;
     [SerializeField] int numWins = 3;

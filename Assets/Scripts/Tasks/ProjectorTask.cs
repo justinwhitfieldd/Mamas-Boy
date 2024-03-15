@@ -6,10 +6,10 @@ public class ProjectorTask : MonoBehaviour, IInteractable
 {
     // Reference to the FPSMovement script
     public FPSController FPSController;
-    public MultiSkillBarMove multiskillBarMove;
-    public PlaceInCamera placeInCamera;
-    public TaskCounter taskCounter;
-    [SerializeField] public InteractionPromptUI _interactionPromptUI;
+    private MultiSkillBarMove multiskillBarMove;
+    private PlaceInCamera placeInCamera;
+    private TaskCounter taskCounter;
+    [SerializeField] private InteractionPromptUI _interactionPromptUI;
     public bool taskFailed = false;
     public bool interacting = false;
     [SerializeField] int numWins = 2;
