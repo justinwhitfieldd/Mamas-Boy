@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5350252632728249315}
   - component: {fileID: 8991304369175867285}
   - component: {fileID: 2737303981849257616}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: door_3_bottom_B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 7406601630507528199}
   - component: {fileID: 4301511284109676143}
   - component: {fileID: 6635374835685129996}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: door_3_top_B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -267,7 +267,7 @@ GameObject:
   - component: {fileID: 451595027724462643}
   - component: {fileID: 4167728787760139882}
   - component: {fileID: 2262975604974280063}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: door_3_bottom_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -396,7 +396,7 @@ GameObject:
   - component: {fileID: 4748843372165154271}
   - component: {fileID: 8710632831437860958}
   - component: {fileID: 4401959938015804669}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Ship Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -506,6 +506,16 @@ MonoBehaviour:
   animator: {fileID: 4748843372165154271}
   isDoorOpen: 0
   alien: {fileID: 2001964138031821453, guid: 7ae564a697f0f9b4194247de73808360, type: 3}
+  openLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  closedLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  doorTopA: {fileID: 6914284550066455818}
+  doorTopB: {fileID: 3975952935717710301}
+  doorBottomA: {fileID: 5424538951962294302}
+  doorBottomB: {fileID: 2449214083431284464}
 --- !u!64 &4401959938015804669
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -541,7 +551,7 @@ GameObject:
   - component: {fileID: 2789894343662381581}
   - component: {fileID: 5970477789236762697}
   - component: {fileID: 967543596109572644}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: door_3_top_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}

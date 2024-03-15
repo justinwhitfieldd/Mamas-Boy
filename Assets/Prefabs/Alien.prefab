@@ -923,6 +923,12 @@ MonoBehaviour:
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 8
+  floorLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 64
   alienLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -948,8 +954,8 @@ MonoBehaviour:
   alienStepR: {fileID: 8300000, guid: 7f3e9cb54d39c3e45bd5555c3093fcc9, type: 3}
   disableCollision: 0
   alienHead: {fileID: 0}
-  jumpScareCameraMovementSpeed: 5
   isEating: 0
+  jumpScareCameraMovementSpeed: 5
 --- !u!95 &5168970015460261367
 Animator:
   serializedVersion: 5
