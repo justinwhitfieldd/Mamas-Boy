@@ -6,7 +6,7 @@ public class Interactor : MonoBehaviour
     [SerializeField] private Transform _interactionPoint;
     [SerializeField] private float _interactionPointRadius = 0.5f;
     [SerializeField] private LayerMask _interactableMask;
-    [SerializeField] private InteractionPromptUI _interactionPromptUI;
+    //[SerializeField] private InteractionPromptUI _interactionPromptUI;
 
     private readonly Collider[] _colliders = new Collider[3];
     [SerializeField] private int _numFound;
@@ -24,12 +24,12 @@ public class Interactor : MonoBehaviour
             if(_interactable != null)
             {
 
-                if (!_interactionPromptUI.IsDisplayed) _interactionPromptUI.SetUp(_interactable.InteractionPrompt);
+                //if (!_interactionPromptUI.IsDisplayed) _interactionPromptUI.SetUp(_interactable.InteractionPrompt);
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     _interactable.Interact(this);
-                    _interactionPromptUI.Close(); //This does not work, gotta figure our how to remove when E is pressed
+                //    _interactionPromptUI.Close(); //This does not work, gotta figure our how to remove when E is pressed
                 }
                 
             }
@@ -38,7 +38,7 @@ public class Interactor : MonoBehaviour
         else
         {
             if (_interactable != null) _interactable = null;
-            if (_interactionPromptUI.IsDisplayed) _interactionPromptUI.Close();
+        //    if (_interactionPromptUI.IsDisplayed) _interactionPromptUI.Close();
         }
     }
 

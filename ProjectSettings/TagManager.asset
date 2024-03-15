@@ -12,13 +12,13 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Ship
+  - Ship Walls
   - Water
   - UI
   - Interactable
   - Wander Points
   - Alien
-  - 
+  - Ship Floors
   - 
   - 
   - 

@@ -1,13 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Rendering;
+using Unity.VisualScripting;
 
 public class WanderingSystem : MonoBehaviour
 {
     public GameObject player;
-    public float jumpScareRadius = 1.0f;
+    public float runSpeed = 2.0f;
+    public float jumpScareRadius = 2.0f;
     public float alienFOV = 25f;
-    public float triggerRadius = 2.0f;
+    public float triggerRadius = 8.0f;
     public LayerMask obstacleLayer;
     public LayerMask alienLayer;
     public LayerMask wanderPointLayer;
@@ -15,28 +18,29 @@ public class WanderingSystem : MonoBehaviour
     public GameObject ambienceSystem;
     public GameObject startingPoint;
     public float rotationSpeed = 5.0f;
-    public float waitTimer = 1.0f;
-    public float gravity = 10f;
+    public float waitTimer = 2.5f;
+    public float waitProb = 0.25f;
+    public float gravity = 15f;
     public AudioClip[] alienNoises;
     public AudioClip alienStepL;
     public AudioClip alienStepR;
-    public float stepCadence = 1.0f;
-    public float runCadence = 0.5f;
-
+    public bool disableCollision = false;
+    public GameObject alienHead;
     private CharacterController characterController;
     private Animator animator;
     private GameObject currentPoint;
     private Transform currentTransform;
     private float timer = 0;
     private AudioSource alienNoise;
-    private float stepTimer = 0;
-    private bool leftFoot = true;
     private bool jumpScared = false;
     private float jumpScareRotationSpeed = 25.0f;
     private FPSController playerFPSController;
     private bool playerSeen = false;
     private bool screwGravity = false;
-
+    private int stepCounter = 0;
+    private bool isStopping = true;
+    public float jumpScareCameraMovementSpeed = 5.0f;
+public bool isEating = false;
     void Start()
     {
         alienNoise = GetComponent<AudioSource>();
@@ -45,6 +49,12 @@ public class WanderingSystem : MonoBehaviour
         playerFPSController = player.GetComponent<FPSController>();
         currentPoint = startingPoint;
         currentTransform = currentPoint.transform;
+
+        if (disableCollision)
+        {
+            Physics.IgnoreLayerCollision(GetLayerNumberFromMask(alienLayer), GetLayerNumberFromMask(obstacleLayer), true);
+            screwGravity = true;
+        }
     }
 
     void Update()
@@ -56,19 +66,30 @@ public class WanderingSystem : MonoBehaviour
         RaycastHit hit;
         bool visible = !Physics.Raycast(transform.position, directionToPlayer.normalized, out hit, distanceToPlayer, obstacleLayer);
 
-        #region Handles Jump Scaring Player
-        if (visible && (distanceToPlayer < jumpScareRadius))
+  #region Handles Jump Scaring Player
+        if ((visible && (distanceToPlayer < jumpScareRadius)) || isEating)
         {
             ambienceSystem.SetActive(false);
-            animator.SetBool("Walking", false);
+            animator.SetBool("takedown", true);
 
             playerFPSController.canMove = false;
 
-            Quaternion playerRotation = Quaternion.LookRotation(transform.position - player.transform.position);
-            player.transform.rotation = Quaternion.Lerp(player.transform.rotation, playerRotation, Time.deltaTime * jumpScareRotationSpeed);
+            if (distanceToPlayer <= 1.8f || isEating)
+            {
+                isEating = true;
+                // Smoothly move the player's camera towards the alien's head position and rotation
+                player.GetComponentInChildren<Camera>().transform.position = Vector3.Lerp(
+                    player.GetComponentInChildren<Camera>().transform.position,
+                    alienHead.transform.position,
+                    Time.deltaTime * jumpScareCameraMovementSpeed
+                );
 
-            Quaternion alienRotation = Quaternion.LookRotation(player.transform.position - transform.position);
-            transform.rotation = Quaternion.Lerp(transform.rotation, alienRotation, Time.deltaTime * jumpScareRotationSpeed);
+                player.GetComponentInChildren<Camera>().transform.rotation = Quaternion.Lerp(
+                    player.GetComponentInChildren<Camera>().transform.rotation,
+                    alienHead.transform.rotation,
+                    Time.deltaTime * jumpScareCameraMovementSpeed
+                );
+            }
 
             if (!jumpScared)
             {
@@ -85,8 +106,8 @@ public class WanderingSystem : MonoBehaviour
 
         if (visible && ((angleToPlayer < alienFOV) || (distanceToPlayer < triggerRadius)))
         {
-            bool atPlayer = MoveToTransform(player.transform, (2 * playerFPSController.runSpeed) / 3);
-            if (!atPlayer) MakeFootStep(runCadence);
+            bool atPlayer = MoveToTransform(player.transform, runSpeed);
+            // if (!atPlayer) MakeFootStep(runCadence);
 
             if (!playerSeen) MakeNoise();
             playerSeen = true;
@@ -105,15 +126,22 @@ public class WanderingSystem : MonoBehaviour
         #endregion
 
         #region Handles Wandering to Points
-        bool atTransform = MoveToTransform(currentTransform, playerFPSController.walkSpeed);
+
+        bool atTransform = MoveToTransform(currentTransform, 1f);
 
         if (atTransform)
         {
+            if (!isStopping)
+            {
+                currentTransform = GetNewWanderPoint();
+                return;
+            }
+
             if (timer < waitTimer)
                 timer += Time.deltaTime;
             else
             {
-                SetCollision(true);
+                Debug.Log("Stopped to smell the roses.");
                 MakeNoise();
                 currentTransform = GetNewWanderPoint();
                 timer = 0;
@@ -121,7 +149,7 @@ public class WanderingSystem : MonoBehaviour
         }
         else
         {
-            MakeFootStep(stepCadence);
+            // MakeFootStep(stepCadence);
         }
         #endregion
     }
@@ -133,27 +161,32 @@ public class WanderingSystem : MonoBehaviour
         Vector2 flatTransformToMove = new Vector2(transfromToMove.position.x, transfromToMove.position.z);
         float flatDistanceToTransform = Vector2.Distance(flatTransformToMove, flatPosition);
 
-        if (flatDistanceToTransform > 0.1f)
+        if (flatDistanceToTransform > 0.5f)
         {
-            if (stepTimer > stepCadence) Debug.Log(flatDistanceToTransform);
-            Vector3 velocity = directionToTransform * speed;
-            if (!screwGravity) velocity.y = -gravity * Time.deltaTime;
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToTransform.x, 0, directionToTransform.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
-            characterController.Move(velocity * Time.deltaTime);
+            if (!screwGravity) characterController.Move(new Vector3(0, -gravity * Time.deltaTime, 0));
+            animator.speed = speed;
             animator.SetBool("Walking", (directionToTransform.magnitude > 0));
             return false;
         }
 
-        animator.SetBool("Walking", false);
+        if (isStopping) animator.SetBool("Walking", false);
 
         return true;
     }
 
     Transform GetNewWanderPoint()
     {
-        Debug.Log("Getting new point.");
-        currentPoint = currentPoint.GetComponent<AccessiblePoints>().getRandomAccessiblePoint();
+        float willStop = Random.Range(0.0f, 1.0f);
+        if (willStop < waitProb) isStopping = true;
+        else isStopping = false;
+
+        SetCollision(true);
+
+        stepCounter++;
+        currentPoint = currentPoint.GetComponent<AccessiblePoints>().getRandomAccessiblePoint(stepCounter);
+        Debug.Log("Heading to " + currentPoint.name + ".");
         return currentPoint.transform;
     }
 
@@ -179,7 +212,7 @@ public class WanderingSystem : MonoBehaviour
 
             if (visible)
             {
-                Debug.Log(wanderPoint.name);
+                Debug.Log("Heading to " + wanderPoint.name + " after charging.");
                 currentPoint = wanderPoint;
 
                 return wanderPoint.transform;
@@ -193,37 +226,26 @@ public class WanderingSystem : MonoBehaviour
 
     void SetCollision(bool doCollision)
     {
-        Physics.IgnoreLayerCollision(GetLayerNumberFromMask(alienLayer), GetLayerNumberFromMask(obstacleLayer), !doCollision);
-        screwGravity = !doCollision;
+        if (!disableCollision)
+        {
+            Physics.IgnoreLayerCollision(GetLayerNumberFromMask(alienLayer), GetLayerNumberFromMask(obstacleLayer), !doCollision);
+            screwGravity = !doCollision;
+        }
     }
 
     void MakeNoise()
     {
-        Debug.Log("Making noise.");
         alienNoise.clip = alienNoises[Random.Range(0, alienNoises.Length)];
         alienNoise.PlayOneShot(alienNoise.clip);
     }
 
-    void MakeFootStep(float cadence)
+    void MakeFootStep(int isLeft)
     {
-        if (stepTimer < cadence)
-            stepTimer += Time.deltaTime;
+        if (isLeft == 1)
+            alienNoise.clip = alienStepL;
         else
-        {
-            Debug.Log("Making step sound.");
-            if (leftFoot)
-            {
-                alienNoise.clip = alienStepL;
-                leftFoot = false;
-            }
-            else
-            {
-                alienNoise.clip = alienStepR;
-                leftFoot = true;
-            }
-            alienNoise.PlayOneShot(alienNoise.clip);
-            stepTimer = 0;
-        }
+            alienNoise.clip = alienStepR;
+        alienNoise.PlayOneShot(alienNoise.clip);
     }
 
     int GetLayerNumberFromMask(LayerMask layerMask)

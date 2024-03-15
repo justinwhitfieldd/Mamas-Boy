@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: e412a19d9e204ff4db218bb1013883c0
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: DSEG7 Classic Mini
+  fontNames:
+  - DSEG7 Classic Mini
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: f02518409be4c96429813ba6ae389b92, type: 3}
+  - {fileID: 12800000, guid: 82dcacdae8d3e4842bc6949cafb71947, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

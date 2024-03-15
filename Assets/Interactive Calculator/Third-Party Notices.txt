@@ -1,0 +1,2 @@
+This package includes fonts by Keshikan distributed under Open Font License (OFL). 
+These fonts are copyright (c) 2017, keshikan (http://www.keshikan.net), with Reserved Font Name "DSEG".
