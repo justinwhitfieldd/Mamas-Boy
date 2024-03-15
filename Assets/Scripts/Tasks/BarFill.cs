@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class BarFill : MonoBehaviour
 {
     [SerializeField] private Camera mainCamera;
-    [SerializeField] private float distanceFromCamera = 0.31f; // Distance in front of the camera where the object spawns and moves
     public bool taskFailed = false;
 
     public Scrollbar scrollbar;

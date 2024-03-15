@@ -11416,7 +11416,6 @@ MonoBehaviour:
   _interactableMask:
     serializedVersion: 2
     m_Bits: 64
-  _interactionPromptUI: {fileID: 807537253}
   _numFound: 0
 --- !u!95 &1783836095
 Animator:
@@ -11459,6 +11458,10 @@ MonoBehaviour:
   gravity: 15
   lookSpeed: 2
   lookXLimit: 45
+  characterController: {fileID: 0}
+  walkingBobbingSpeed: 14
+  bobbingAmount: 0.05
+  strafingBobbingAmount: 0.03
   canMove: 1
 --- !u!143 &1783836097
 CharacterController:
@@ -13702,6 +13705,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: GeneratorTask2
       objectReference: {fileID: 0}
+    - target: {fileID: 5751950327616184135, guid: a8be96ae6d51e2249a496a48d179c2ed, type: 3}
+      propertyPath: maxInteractDistance
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 5802885447664672905, guid: a8be96ae6d51e2249a496a48d179c2ed, type: 3}
       propertyPath: m_Camera
       value: 
@@ -13726,6 +13733,10 @@ PrefabInstance:
       propertyPath: mainCamera
       value: 
       objectReference: {fileID: 655854036}
+    - target: {fileID: 6921601235838780284, guid: 2d84c8215285d314088b7a3ce629a106, type: 3}
+      propertyPath: maxInteractDistance
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 7328844138639771600, guid: 2d84c8215285d314088b7a3ce629a106, type: 3}
       propertyPath: mainCamera
       value: 

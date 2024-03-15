@@ -15,7 +15,7 @@ public class ProjectorTask : MonoBehaviour, IInteractable
     [SerializeField] int numWins = 2;
     public int Wins = 0;
     [SerializeField] private bool canInteract = true; // Flag to control if interaction is allowed
-    [SerializeField] private float maxInteractDistance = 3f; // Maximum distance for interaction
+    [SerializeField] private float maxInteractDistance = 4f; // Maximum distance for interaction
     [SerializeField] private string _interactionPrompt;
 
     public string InteractionPrompt

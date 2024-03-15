@@ -18,6 +18,8 @@ public class GenTask : MonoBehaviour, IInteractable
     [SerializeField] private AudioSource loseSound;
     [SerializeField] private AudioSource winSound;
     [SerializeField] private string _interactionPrompt;
+    public bool interacting = false;
+    [SerializeField] private float maxInteractDistance = 4f;
 
     public string InteractionPrompt
     {
@@ -100,7 +102,7 @@ public class GenTask : MonoBehaviour, IInteractable
             Debug.Log(" You completed the task");
             _interactionPromptUI.SetUp("Finished!");
             InteractionPrompt = "Finished!";
-            taskCounter.IncrementCounter(); // add 1 to tasks done
+            taskCounter.IncrementCounter("backup_generator"); // add 1 to tasks done
             canInteract = false;
             // Once skill bar movement is done, despawn the background
             placeInCamera.DespawnforPlayer();
@@ -122,5 +124,22 @@ public class GenTask : MonoBehaviour, IInteractable
         // Enable movement controls for the avatar and camera
         if (FPSController != null)
             FPSController.enabled = true;
+    }
+
+    private void Update()
+    {
+        if (Vector3.Distance(FPSController.transform.position, transform.position) < maxInteractDistance && !interacting)
+        {
+            // Hide the UI panel
+            _interactionPromptUI.SetUp("Allign Control Vectors (E)");
+            interacting = true;
+        }
+        // Check if player is too far away
+        if (Vector3.Distance(FPSController.transform.position, transform.position) > maxInteractDistance && interacting)
+        {
+            // Hide the UI panel
+            _interactionPromptUI.Close();
+            interacting = false;
+        }
     }
 }

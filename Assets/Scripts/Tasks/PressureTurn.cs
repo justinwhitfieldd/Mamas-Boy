@@ -16,7 +16,7 @@ public class PressureTurn : MonoBehaviour, IInteractable
     [SerializeField] int numWins = 3;
     public int Wins = 0;
     [SerializeField] private bool canInteract = true; // Flag to control if interaction is allowed
-    [SerializeField] private float maxInteractDistance = 1f; // Maximum distance for interaction
+    [SerializeField] private float maxInteractDistance = 4f; // Maximum distance for interaction
 
     [SerializeField] private string _interactionPrompt;
 
