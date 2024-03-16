@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 743220906948840048}
   m_Layer: 7
   m_Name: Wander Point
-  m_TagString: Untagged
+  m_TagString: Wander Point
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -96,4 +96,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcdced036cd63f14db0327b2ada1e818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wanderPointLayer:
+    serializedVersion: 2
+    m_Bits: 128
   accessiblePoints: []
+  ranking: 0
