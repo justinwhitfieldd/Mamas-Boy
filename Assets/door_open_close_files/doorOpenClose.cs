@@ -14,6 +14,7 @@ public class DoorOpenClose : MonoBehaviour
     public GameObject doorTopB;
     public GameObject doorBottomA;
     public GameObject doorBottomB;
+    [SerializeField] private AudioSource doorSound;
 
     private void Start()
     {
@@ -30,6 +31,7 @@ public class DoorOpenClose : MonoBehaviour
 
     public void toggie()
     {
+        doorSound.Play();
         isDoorOpen = !isDoorOpen;
         animator.SetBool("character_nearby",isDoorOpen);
         if (isDoorOpen)

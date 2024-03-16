@@ -8,7 +8,10 @@ public class change_screen : MonoBehaviour, IInteractable
     [SerializeField] public GameObject next_screen; // Manually assiGn this in the Inspector
     [SerializeField] public GameObject current_screen_text;
     [SerializeField] private string _interactionPrompt;
-
+    [SerializeField] private AudioSource alarm;
+    public void Start(){
+        alarm.Play();
+    }
     public string InteractionPrompt
     {
         get => _interactionPrompt;
@@ -17,6 +20,7 @@ public class change_screen : MonoBehaviour, IInteractable
 
     public bool Interact(Interactor interactor)
     {
+        alarm.Stop();
         Debug.Log("Switching to new screen");
         current_screen_text.gameObject.SetActive(false);
         next_screen.gameObject.SetActive(true);
