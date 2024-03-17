@@ -11,7 +11,9 @@ public class RingMinigame : MonoBehaviour
     public float rotationSpeed3 = 250f;
     public GameObject SuccessIcon;
     public TaskCounter taskCounter;
-
+    [SerializeField] public AudioSource loseSound;
+    [SerializeField] public AudioSource winSound;
+    [SerializeField] public AudioSource ringSuccess;
     public float successThreshold = 10f;
     public Image resultImage;
     public Image vector1box;
@@ -65,6 +67,7 @@ public class RingMinigame : MonoBehaviour
             {
                 if (!ring1Stopped)
                 {
+                    ringSuccess.Play();
                     ring1Stopped = true;
                     ChangeImageColor(vector1box,successColor);
 
@@ -74,12 +77,13 @@ public class RingMinigame : MonoBehaviour
                     ring2Stopped = true;
                     if (!CheckNextRingPositions(ring1, ring2))
                     {
-                                    
+                        loseSound.Play();
                         ChangeImageColor(vector2box,failureColor);
                         ChangeImageColor(vector3box,failureColor);
                         EndGame(false);
                         return;
                     } else {
+                        ringSuccess.Play();
                         ChangeImageColor(vector2box,successColor);
                     }
                 }
@@ -88,11 +92,13 @@ public class RingMinigame : MonoBehaviour
                     ring3Stopped = true;
                     if (!CheckNextRingPositions(ring2, ring3))
                     {
+                        loseSound.Play();
                         ChangeImageColor(vector3box,failureColor);
                         EndGame(false);
                         return;
                     }
                     else {
+                        winSound.Play();
                         ChangeImageColor(vector3box,successColor);
                     }
                     CheckSuccess();

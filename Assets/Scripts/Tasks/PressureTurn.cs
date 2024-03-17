@@ -9,6 +9,7 @@ public class PressureTurn : MonoBehaviour, IInteractable
     public FPSController FPSController;
     private SkillBarMove skillBarMove;
     private PlaceInCamera placeInCamera;
+    public GameObject steam;
     private TaskCounter taskCounter;
     [SerializeField] private InteractionPromptUI _interactionPromptUI;
     public bool taskFailed = false;
@@ -102,6 +103,7 @@ public class PressureTurn : MonoBehaviour, IInteractable
         }
         else
         {
+            steam.SetActive(false);
             Debug.Log(" You completed the task");
             _interactionPromptUI.SetUp("Finished!");
             InteractionPrompt = "Finished!";
@@ -143,6 +145,7 @@ public class PressureTurn : MonoBehaviour, IInteractable
             else
             {
                 _interactionPromptUI.SetUp("Finished!");
+                interacting = true;
             }
 
         }
