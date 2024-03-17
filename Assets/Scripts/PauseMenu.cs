@@ -7,11 +7,15 @@ public class PauseMenu : MonoBehaviour
 {
     public static bool Paused = false;
     public GameObject PauseMenuCanvas;
+    private FPSController playerFPSController;
+    public GameObject player;
 
     void Start()
     {
+        playerFPSController = player.GetComponent<FPSController>();
         PauseMenuCanvas.SetActive(false);
         Time.timeScale = 1f;
+        AudioListener.pause = false; // Make sure audio is not paused initially
     }
 
     void Update()
@@ -20,10 +24,14 @@ public class PauseMenu : MonoBehaviour
         {
             if(Paused)
             {
+                AudioListener.pause = false;
+                playerFPSController.canMove = true;
                 Play();
             }
             else
             {
+                AudioListener.pause = true; // Pause audio
+                playerFPSController.canMove = false;
                 Stop();
             }
         }
