@@ -119,9 +119,9 @@ public class TargetingSystem : MonoBehaviour
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToTransform.x, 0, directionToTransform.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
             moveDirection = directionToTransform * speed;
-            if (!characterController.isGrounded) moveDirection.y -= gravity;
-            characterController.Move(moveDirection * Time.deltaTime);
-            animator.SetBool("Walking", (directionToTransform.magnitude > 0));
+            // if (!characterController.isGrounded) moveDirection.y -= gravity;
+            // characterController.Move(moveDirection * Time.deltaTime);
+            animator.SetBool("Walking", true);
             return false;
         }
 
