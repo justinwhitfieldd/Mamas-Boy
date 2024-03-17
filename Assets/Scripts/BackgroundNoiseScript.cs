@@ -5,8 +5,8 @@ using UnityEngine;
 public class BackgroundNoiseScript : MonoBehaviour
 {
     private float timer = 0;
-    public float noiseRateEarliest = 15;
-    public float noiseRateLatest = 30;
+    public float noiseRateEarliest = 30;
+    public float noiseRateLatest = 60;
     private float nextNoiseTimer;
     private AudioSource clankNoise;
     public AudioClip[] clankNoises;

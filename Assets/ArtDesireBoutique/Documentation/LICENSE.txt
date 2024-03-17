@@ -1,0 +1,12 @@
+This is ULTIMATE SOUNDFX [750+ sounds]
+
+These sound effects have been released under CC0 creative commons license. You can do anything you want with these sounds, however you cannot repackage and sell them.
+
+All the sounds are at 44100hz 16bit mono .wav format and at -6db volume level. 
+
+If the filename has a [L] in it, then the sound seamlessly loops.
+
+Check out my music portfolio:
+Jigsaw Sabotage - https://open.spotify.com/artist/3hXPXm3gFo83i9HnGVtD3d 
+Communities End - https://open.spotify.com/artist/31yHtkjedD1ueRlQmruC1n
+

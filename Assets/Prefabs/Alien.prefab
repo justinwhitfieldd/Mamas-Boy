@@ -185,12 +185,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 667451872889299105}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.00215292, y: -0.9902403, z: 0.13756901, w: 0.022234323}
-  m_LocalPosition: {x: 0.17963886, y: 4.3612146, z: 4.7087183}
+  m_LocalRotation: {x: 0.023874108, y: -0.9902826, z: 0.13699882, w: 0.0013683925}
+  m_LocalPosition: {x: -0.041324884, y: 0.5730811, z: 4.5215626}
   m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2001964138031821453}
+  m_Father: {fileID: 6246607619875143864}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &9054814199332431862
 Camera:
@@ -900,7 +900,7 @@ Transform:
   - {fileID: 6360169185117148070}
   - {fileID: 1278096707960259751}
   - {fileID: 5370978435262522914}
-  - {fileID: 8871954460178822012}
+  - {fileID: 8772693369927168524}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3078544092705418404
@@ -917,12 +917,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   runSpeed: 2.25
+  jumpPower: 7
   jumpScareRadius: 3
   alienFOV: 25
   triggerRadius: 8
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 8
+  interactableLayer:
+    serializedVersion: 2
+    m_Bits: 64
   alienLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -947,6 +951,12 @@ MonoBehaviour:
   alienStepL: {fileID: 8300000, guid: b25ef0894e9871f4ebc55c048a831bca, type: 3}
   alienStepR: {fileID: 8300000, guid: 7f3e9cb54d39c3e45bd5555c3093fcc9, type: 3}
   disableCollision: 0
+  alienHead: {fileID: 0}
+  isEating: 0
+  jumpScareCameraMovementSpeed: 5
+  currentPoint: {fileID: 0}
+  freeze: 0
+  canJumpScare: 1
 --- !u!95 &5168970015460261367
 Animator:
   serializedVersion: 5
@@ -979,7 +989,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -1491,7 +1501,8 @@ Transform:
   m_LocalPosition: {x: -0, y: 0.5253326, z: 0.19155261}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8871954460178822012}
   m_Father: {fileID: 4972348326460108243}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4302987451536831645
@@ -2413,6 +2424,37 @@ Transform:
   m_Children:
   - {fileID: 4330912017025434063}
   m_Father: {fileID: 5370978435262522914}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8232465466774534339
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8772693369927168524}
+  m_Layer: 0
+  m_Name: cameraposition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8772693369927168524
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8232465466774534339}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7309801, z: -0, w: 0.68239886}
+  m_LocalPosition: {x: -0.9000141, y: 0.49544305, z: 3.567601}
+  m_LocalScale: {x: 1.3333327, y: 1.3333334, z: 1.3333327}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2001964138031821453}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8409532865312330980
 GameObject:

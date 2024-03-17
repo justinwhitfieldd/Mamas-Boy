@@ -6,18 +6,21 @@ TagManager:
   tags:
   - MainCanvas
   - TaskSystem
+  - lesserCanvas1
+  - scrollbar1
+  - Wander Point
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Ship Walls
+  - Ship Obstacles
   - Water
   - UI
   - Interactable
   - Wander Points
-  - Alien
+  - AI
   - Ship Floors
-  - 
+  - Ship Doors
   - 
   - 
   - 

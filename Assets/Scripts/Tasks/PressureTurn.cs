@@ -7,17 +7,19 @@ public class PressureTurn : MonoBehaviour, IInteractable
 {
     // Reference to the FPSMovement script
     public FPSController FPSController;
-    public SkillBarMove skillBarMove;
-    public PlaceInCamera placeInCamera;
-    public TaskCounter taskCounter;
-    [SerializeField] public InteractionPromptUI _interactionPromptUI;
+    private SkillBarMove skillBarMove;
+    private PlaceInCamera placeInCamera;
+    public GameObject steam;
+    private TaskCounter taskCounter;
+    [SerializeField] private InteractionPromptUI _interactionPromptUI;
     public bool taskFailed = false;
     public bool interacting = false;
     [SerializeField] int numWins = 3;
     public int Wins = 0;
     [SerializeField] private bool canInteract = true; // Flag to control if interaction is allowed
-    [SerializeField] private float maxInteractDistance = 1f; // Maximum distance for interaction
-
+    [SerializeField] private float maxInteractDistance = 4f; // Maximum distance for interaction
+    [SerializeField] private AudioSource loseSound;
+    [SerializeField] private AudioSource winSound;
     [SerializeField] private string _interactionPrompt;
 
     public string InteractionPrompt
@@ -80,10 +82,12 @@ public class PressureTurn : MonoBehaviour, IInteractable
 
             if (taskFailed)
             {
+                loseSound.Play();
                 break;
             }
             else
             {
+                winSound.Play();
                 Wins += 1;
             }
         }
@@ -99,6 +103,7 @@ public class PressureTurn : MonoBehaviour, IInteractable
         }
         else
         {
+            steam.SetActive(false);
             Debug.Log(" You completed the task");
             _interactionPromptUI.SetUp("Finished!");
             InteractionPrompt = "Finished!";
@@ -130,9 +135,18 @@ public class PressureTurn : MonoBehaviour, IInteractable
     {
         if (Vector3.Distance(FPSController.transform.position, transform.position) < maxInteractDistance && !interacting)
         {
-            // Hide the UI panel
-            _interactionPromptUI.SetUp("Fix Pressure Gauge (E)");
-            interacting = true;
+            if (canInteract)
+            {
+                // Hide the UI panel
+                _interactionPromptUI.SetUp("Fix Pressure Gauge (E)");
+                interacting = true;
+            }
+
+            else
+            {
+                _interactionPromptUI.SetUp("Finished!");
+                interacting = true;
+            }
 
         }
         // Check if player is too far away

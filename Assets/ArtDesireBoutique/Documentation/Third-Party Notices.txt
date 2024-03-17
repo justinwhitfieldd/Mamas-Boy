@@ -1,0 +1,18 @@
+License agreement
+Standard Unity Asset Store EULA
+Third-Party Notices
+This file lists all third-party components included in this package, along with their respective licenses.
+
+Component: FONT: Electronic Highway Sign
+License: Free License
+Link: https://www.fonts4free.net/electronic-highway-sign-font.html
+
+Component: FONT: Zorque
+License: Free License
+Link: https://www.fontspring.com/fonts/typodermic/zorque
+
+
+Component: ASSET: HQ PBR Old Retro Radio (Free)
+License: Extension Asset. One license required for each individual user.
+Link: https://assetstore.unity.com/packages/3d/props/hq-pbr-old-retro-radio-free-180303
+
