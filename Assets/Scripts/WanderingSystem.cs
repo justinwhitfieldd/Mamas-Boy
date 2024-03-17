@@ -16,7 +16,6 @@ public class WanderingSystem : MonoBehaviour
     public LayerMask obstacleLayer;
     public LayerMask interactableLayer;
     public LayerMask alienLayer;
-    public LayerMask wanderPointLayer;
     public AudioClip jumpScareSound;
     public GameObject ambienceSystem;
     public GameObject startingPoint;
@@ -31,10 +30,12 @@ public class WanderingSystem : MonoBehaviour
     public GameObject alienHead;
     public bool isEating = false;
     public float jumpScareCameraMovementSpeed = 5.0f;
+    public GameObject currentPoint;
+    public bool freeze = false;
+    public bool canJumpScare = true;
 
     private CharacterController characterController;
     private Animator animator;
-    private GameObject currentPoint;
     private Transform currentTransform;
     private float timer = 0;
     private AudioSource alienNoise;
@@ -65,6 +66,12 @@ public class WanderingSystem : MonoBehaviour
 
     private void Update()
     {
+        if (freeze)
+        {
+            animator.SetBool("Walking", false);
+            return;
+        }
+
         speedPerSec = Vector3.Distance(oldPosition, transform.position) / Time.deltaTime;
         oldPosition = transform.position;
 
@@ -75,10 +82,10 @@ public class WanderingSystem : MonoBehaviour
         bool visible = GetVisibility(directionToPlayer, distanceToPlayer);
 
         #region Handles Jump Scaring Player
-        if ((visible && (distanceToPlayer < jumpScareRadius)) || isEating)
+        if (canJumpScare && ((visible && (distanceToPlayer < jumpScareRadius)) || isEating))
         {
             ambienceSystem.SetActive(false);
-            animator.SetBool("takedown", true);
+            animator.SetBool("Takedown", true);
 
             playerFPSController.canMove = false;
 
@@ -112,7 +119,7 @@ public class WanderingSystem : MonoBehaviour
 
         #region Handles Charging to Player
 
-        if (visible && ((angleToPlayer < alienFOV) || (distanceToPlayer < triggerRadius)))
+        if (canJumpScare && (visible && ((angleToPlayer < alienFOV) || (distanceToPlayer < triggerRadius))))
         {
             bool atPlayer = MoveToTransform(player.transform, runSpeed);
             if ((speedPerSec < 1.0f) && characterController.isGrounded)
@@ -209,8 +216,8 @@ public class WanderingSystem : MonoBehaviour
         SetCollision(true);
 
         stepCounter++;
-        currentPoint = currentPoint.GetComponent<AccessiblePoints>().getRandomAccessiblePoint(stepCounter);
-        Debug.Log("Heading to " + currentPoint.name + ".");
+        currentPoint = currentPoint.GetComponent<AccessiblePoints>().GetRandomAccessiblePoint(stepCounter);
+        Debug.Log("The alien is heading to " + currentPoint.name + ".");
         return currentPoint.transform;
     }
 
@@ -226,7 +233,7 @@ public class WanderingSystem : MonoBehaviour
 
     private Transform GetClosestWanderPoint()
     {
-        GameObject[] allWanderPoints = GameObject.FindObjectsOfType<GameObject>().Where(obj => (wanderPointLayer.value & (1 << obj.layer)) != 0).ToArray();
+        GameObject[] allWanderPoints = GameObject.FindGameObjectsWithTag("Wander Point");
 
         System.Array.Sort(allWanderPoints, (obj1, obj2) =>
         {
@@ -245,14 +252,14 @@ public class WanderingSystem : MonoBehaviour
 
             if (visible)
             {
-                Debug.Log("Player lost! Heading to " + wanderPoint.name + " after charging.");
+                Debug.Log("Player lost! The alien is heading to " + wanderPoint.name + " after charging.");
                 currentPoint = wanderPoint;
 
                 return wanderPoint.transform;
             }
         }
 
-        Debug.LogWarning("No wander points visible! Defaulting to closest non-visible point.");
+        Debug.LogWarning("No wander points visible! Alien is defaulting to closest non-visible point.");
         SetCollision(false);
         return allWanderPoints[0].transform;
     }

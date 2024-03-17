@@ -7,31 +7,38 @@ public class DoorOpenClose : MonoBehaviour
     // Start is called before the first frame update
     public Animator animator;
     public bool isDoorOpen = false;
+    public float autoToggieDistane = 4.0f;
     public Transform alien;
+    public Transform robot;
     public LayerMask openLayer;
     public LayerMask closedLayer;
     public GameObject doorTopA;
     public GameObject doorTopB;
     public GameObject doorBottomA;
     public GameObject doorBottomB;
-    [SerializeField] private AudioSource doorSound;
+    public AudioClip doorSound;
+    private AudioSource doorNoise;
 
     private void Start()
     {
         animator.SetBool("character_nearby", isDoorOpen);
+        doorNoise = GetComponent<AudioSource>();
+        doorNoise.clip = doorSound;
     }
 
     // Update is called once per frame
     private void Update()
     {
         float distanceToAlien = Vector3.Distance(transform.position, alien.position);
+        float distanceToRobot = Vector3.Distance(transform.position, robot.position);
 
-        if ((distanceToAlien < 4.0f) && (!isDoorOpen)) toggie();
+        if ((distanceToAlien < autoToggieDistane) && (!isDoorOpen)) toggie();
+        if ((distanceToRobot < autoToggieDistane) && (!isDoorOpen)) toggie();
     }
 
     public void toggie()
     {
-        doorSound.Play();
+        doorNoise.PlayOneShot(doorNoise.clip);
         isDoorOpen = !isDoorOpen;
         animator.SetBool("character_nearby",isDoorOpen);
         if (isDoorOpen)

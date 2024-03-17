@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class AccessiblePoints : MonoBehaviour
@@ -7,7 +8,9 @@ public class AccessiblePoints : MonoBehaviour
     public GameObject[] accessiblePoints;
     public int ranking = 0;
 
-    public GameObject getRandomAccessiblePoint(int newRanking)
+    private List<GameObject> shortestPath = null;
+
+    public GameObject GetRandomAccessiblePoint(int newRanking)
     {
         ranking = newRanking;
         float lowestRanking = Mathf.Infinity;
@@ -23,6 +26,48 @@ public class AccessiblePoints : MonoBehaviour
             }
         }
         return lowestPoint;
+    }
+
+    private List<GameObject> RecurseOverAllPoints(GameObject hostWanderPoint, GameObject destinationPoint, List<GameObject> currentPath)
+    {
+        if (hostWanderPoint == destinationPoint)
+        {
+            return currentPath; // Reached destination, return the current path
+        }
+
+        GameObject[] hostAccessiblePoints = hostWanderPoint.GetComponent<AccessiblePoints>().accessiblePoints;
+        List<GameObject> shortest = null;
+
+        foreach (GameObject wanderPoint in hostAccessiblePoints)
+        {
+            if (!currentPath.Contains(wanderPoint)) // Avoid revisiting the same point
+            {
+                List<GameObject> newPath = new List<GameObject>(currentPath);
+                newPath.Add(wanderPoint);
+                List<GameObject> candidatePath = RecurseOverAllPoints(wanderPoint, destinationPoint, newPath);
+
+                if (candidatePath != null && (shortest == null || candidatePath.Count < shortest.Count))
+                {
+                    shortest = candidatePath;
+                }
+            }
+        }
+        return shortest;
+    }
+
+
+    public GameObject GetPointClosestTo(GameObject destinationPoint)
+    {
+        shortestPath = RecurseOverAllPoints(gameObject, destinationPoint, new List<GameObject> { gameObject });
+
+        if (shortestPath != null && shortestPath.Count > 1)
+        {
+            return shortestPath[1]; // The next point in the shortest path after the starting point
+        }
+        else
+        {
+            return destinationPoint;
+        }
     }
 
     public static T[] Shuffle<T>(T[] array)

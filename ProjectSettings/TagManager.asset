@@ -8,6 +8,7 @@ TagManager:
   - TaskSystem
   - lesserCanvas1
   - scrollbar1
+  - Wander Point
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - UI
   - Interactable
   - Wander Points
-  - Alien
+  - AI
   - Ship Floors
   - Ship Doors
   - 
