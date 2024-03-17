@@ -8,9 +8,16 @@ public class TaskIndicatorManager : MonoBehaviour
 
     // Declare public variables for each task's image
     public Image pressureRegulatorLight;
+    public Image farm_manual_controlls_light;
+    public Image oxygen_scrubber_light;
     public Image guidance_light;
+    
     public GameObject status_bar_guidance;
+    public GameObject status_bar_oxygen;
     public GameObject status_bar_pressure;
+    public GameObject status_text_guidance;
+    public GameObject status_text_oxygen;
+    public GameObject status_text_pressure;
     // Add more public variables for each task's image
 
     // Declare a public variable for the new game object
@@ -25,6 +32,8 @@ public class TaskIndicatorManager : MonoBehaviour
         // Initialize the taskIndicators dictionary with task names and false values
         taskIndicators.Add("pressure_regulator_light", false);
         taskIndicators.Add("guidance", false);
+        taskIndicators.Add("farm", false);
+        taskIndicators.Add("oxygen", false);
         // Add more tasks as needed
 
         // Fetch the button and image components from the new object prefab
@@ -71,11 +80,20 @@ public class TaskIndicatorManager : MonoBehaviour
         {
             case "pressure_regulator_light":
                 status_bar_pressure.SetActive(true);
+                status_text_pressure.SetActive(true);
                 return pressureRegulatorLight;
             case "guidance":
                 status_bar_guidance.SetActive(true);
+                status_text_guidance.SetActive(true);
                 return guidance_light;
-            // Add more cases for each task
+            case "oxygen":
+                status_bar_oxygen.SetActive(true);
+                status_text_oxygen.SetActive(true);
+                return oxygen_scrubber_light;
+            case "farm":
+                status_bar_oxygen.SetActive(true);
+                status_text_oxygen.SetActive(true);
+                return farm_manual_controlls_light;
             default:
                 return null;
         }

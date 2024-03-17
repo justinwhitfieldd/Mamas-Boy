@@ -10,7 +10,7 @@ public class GenTask : MonoBehaviour, IInteractable
     private BarFill BarFill;
     private PlaceInCamera placeInCamera;
     private TaskCounter taskCounter;
-    [SerializeField] GameObject scrollBar;
+    [SerializeField] public GameObject scrollBar;
     [SerializeField] private InteractionPromptUI _interactionPromptUI;
     public bool taskFailed = false;
     [SerializeField] private bool canInteract = true; // Flag to control if interaction is allowed
@@ -40,7 +40,7 @@ public class GenTask : MonoBehaviour, IInteractable
         // get task counter
         GameObject taskSystem = GameObject.FindWithTag("TaskSystem");
         taskCounter = taskSystem.GetComponentInChildren<TaskCounter>();
-        scrollBar.SetActive(false);
+        scrollBar.SetActive(true);
     }
 
     public bool Interact(Interactor inspector)

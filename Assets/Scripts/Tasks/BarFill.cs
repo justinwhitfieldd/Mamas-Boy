@@ -5,18 +5,19 @@ using UnityEngine.UI;
 
 public class BarFill : MonoBehaviour
 {
-    [SerializeField] private Camera mainCamera;
+    public GameObject scrollBarr;
+    public GameObject success_text;
+    public GameObject this_button;
     public bool taskFailed = false;
-
     public Scrollbar scrollbar;
+    [SerializeField] private AudioSource winSound;
     public float fillTime = 6f; // Adjust as needed
-    private bool isFilling = false;
+    public bool isFilling = false;
     private bool filledBar = false;
     private float elapsedTime = 0f;
+    public TaskCounter taskCounter;
 
     // Call this method to start the appearance and disappearance coroutine
-    // Call this method to start the appearance and disappearance coroutine
-
     public void StartAppearAndDisappear()
     {
         elapsedTime = 0f; // Reset elapsed time
@@ -26,7 +27,15 @@ public class BarFill : MonoBehaviour
 
     private void Update()
     {
-        isFilling = Input.GetKey(KeyCode.E);
+        // Check if the button is being clicked
+        if (Input.GetMouseButton(0))
+        {
+            isFilling = true;
+        }
+        else
+        {
+            isFilling = false;
+        }
 
         // Fill the scrollbar if isFilling is true and the scrollbar is not filled
         if (isFilling && !filledBar)
@@ -36,14 +45,20 @@ public class BarFill : MonoBehaviour
 
         if (filledBar)
         {
+            winSound.Play();
+            taskCounter.IncrementCounter("farm");
             taskFailed = false;
-            gameObject.SetActive(false); // Deactivate the object
+            this_button.SetActive(false);
+            success_text.SetActive(true);
+            scrollBarr.SetActive(false); // Deactivate the object
         }
 
         if (!isFilling)
         {
+            elapsedTime = 0f;
+            scrollbar.size = 0;
             taskFailed = true;
-            gameObject.SetActive(false); // Deactivate the object
+            //gameObject.SetActive(false); // Deactivate the object
         }
     }
 
@@ -53,7 +68,6 @@ public class BarFill : MonoBehaviour
         taskFailed = false;
         // Wait for the AppearAndDisappear coroutine to finish
         yield return new WaitUntil(() => !gameObject.activeSelf);
-
     }
 
     private void FillScrollbar()
@@ -73,5 +87,4 @@ public class BarFill : MonoBehaviour
             filledBar = true;
         }
     }
-
 }

@@ -96,7 +96,7 @@ public class ProjectorTask : MonoBehaviour, IInteractable
             // Once skill bar movement is done, despawn the background
             placeInCamera.DespawnforPlayer();
             yield return new WaitForSeconds(2.5f);
-            _interactionPromptUI.SetUp("Allign Control Vectors (E)");
+            _interactionPromptUI.SetUp("Reboot Oxygen Scrubber (Press E)");
             canInteract = true;
         }
 
