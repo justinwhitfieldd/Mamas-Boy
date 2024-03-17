@@ -39,6 +39,7 @@ public class PauseMenu : MonoBehaviour
 
     void Stop()
     {
+        AudioListener.pause = true;
         PauseMenuCanvas.SetActive(true);
         Time.timeScale = 0f;
         Paused = true;
@@ -46,6 +47,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Play()
     {
+        AudioListener.pause = false;
         PauseMenuCanvas.SetActive(false);
         Time.timeScale = 1f;
         Paused = false;
