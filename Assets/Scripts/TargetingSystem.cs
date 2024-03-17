@@ -56,7 +56,10 @@ public class TargetingSystem : MonoBehaviour
         oldPosition = gameObject.transform.position;
         if (disableCollision) Physics.IgnoreLayerCollision(GetLayerNumberFromMask(robotLayer), GetLayerNumberFromMask(obstacleLayer), true);
     }
-
+    public void turnOn()
+    {
+        poweredDown =false;
+    }
     private void Update()
     {
         if (poweredDown) return;
