@@ -2,6 +2,7 @@ using UnityEngine;
 //stolen from https://www.youtube.com/watch?v=THmW4YolDok
 public class DoorController : MonoBehaviour, IInteractable
 {
+    public GameObject pressEcanvas;
     public DoorOpenClose thedoor;
     [SerializeField] private string _interactionPrompt;
 
@@ -15,6 +16,11 @@ public class DoorController : MonoBehaviour, IInteractable
     public bool Interact(Interactor interactor)
     {
         thedoor.toggie();
+        
+        if (pressEcanvas != null)
+        {
+            pressEcanvas.SetActive(false);
+        }
         return true;
     }
 }

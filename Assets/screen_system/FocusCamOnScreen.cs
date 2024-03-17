@@ -9,6 +9,7 @@ public class FocusCamOnScreen : MonoBehaviour, IInteractable
     [SerializeField] private Camera focusCamera; // Reference to the new camera you want to switch to
     [SerializeField] private FPSController fpsController; // Manually assign this in the Inspector
     [SerializeField] private string _interactionPrompt;
+    public GameObject pressEcanvas;
 
     public string InteractionPrompt
     {
@@ -20,6 +21,10 @@ public class FocusCamOnScreen : MonoBehaviour, IInteractable
 
     public bool Interact(Interactor interactor)
     {
+        if (pressEcanvas != null)
+        {
+            pressEcanvas.SetActive(false);
+        }
         isFocus = !isFocus;
         Debug.Log($"Interaction occurred. isFocus: {isFocus}");
 

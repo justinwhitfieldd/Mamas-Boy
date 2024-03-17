@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class FPSController : MonoBehaviour
 {
-    public Animator animator;
+    //public Animator animator;
     public Camera playerCamera;
     public float walkSpeed = 6f;
     public float runSpeed = 12f;
@@ -70,37 +70,37 @@ public class FPSController : MonoBehaviour
         float movementDirectionY = moveDirection.y;
         moveDirection = (forward * curSpeedX) + (right * curSpeedY);
 
-        if (curSpeedX > 0)
-        {
-            animator.SetBool("IsMovingBackward", false);
-            animator.SetBool("IsMovingForward", true);
-        }
-        else if (curSpeedX < 0)
-        {
-            animator.SetBool("IsMovingForward", false);
-            animator.SetBool("IsMovingBackward", true);
-        }
-        else
-        {
-            animator.SetBool("IsMovingBackward", false);
-            animator.SetBool("IsMovingForward", false);
-        }
+        // if (curSpeedX > 0)
+        // {
+        //     animator.SetBool("IsMovingBackward", false);
+        //     animator.SetBool("IsMovingForward", true);
+        // }
+        // else if (curSpeedX < 0)
+        // {
+        //     animator.SetBool("IsMovingForward", false);
+        //     animator.SetBool("IsMovingBackward", true);
+        // }
+        // else
+        // {
+        //     animator.SetBool("IsMovingBackward", false);
+        //     animator.SetBool("IsMovingForward", false);
+        // }
 
-        if (curSpeedY > 0)
-        {
-            animator.SetBool("IsMovingLeft", false);
-            animator.SetBool("IsMovingRight", true);
-        }
-        else if (curSpeedY < 0)
-        {
-            animator.SetBool("IsMovingRight", false);
-            animator.SetBool("IsMovingLeft", true);
-        }
-        else
-        {
-            animator.SetBool("IsMovingLeft", false);
-            animator.SetBool("IsMovingRight", false);
-        }
+        // if (curSpeedY > 0)
+        // {
+        //     animator.SetBool("IsMovingLeft", false);
+        //     animator.SetBool("IsMovingRight", true);
+        // }
+        // else if (curSpeedY < 0)
+        // {
+        //     animator.SetBool("IsMovingRight", false);
+        //     animator.SetBool("IsMovingLeft", true);
+        // }
+        // else
+        // {
+        //     animator.SetBool("IsMovingLeft", false);
+        //     animator.SetBool("IsMovingRight", false);
+        // }
         #endregion
 
         #region Handles Jumping
