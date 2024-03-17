@@ -7,9 +7,12 @@ using UnityEditor.Experimental.GraphView;
 
 public class TargetingSystem : MonoBehaviour
 {
+    public GameObject fireStream;
     public GameObject alien;
     public GameObject player;
     public bool poweredDown = true;
+    public bool hasPoweredOn = false;
+
     public float speed = 10f;
     public float destroyRadius = 4.0f;
     public LayerMask obstacleLayer;
@@ -25,6 +28,10 @@ public class TargetingSystem : MonoBehaviour
 
     private CharacterController characterController;
     private Animator animator;
+
+    public Material alienMaterial;
+    public Animator alienAnimator;
+
     private WanderingSystem alienController;
     private FPSController playerFPSController;
     private GameObject currentPoint;
@@ -36,7 +43,7 @@ public class TargetingSystem : MonoBehaviour
     private Vector3 moveDirection = Vector3.zero;
     private float speedTimer = 0.0f;
     private float destroyRotationSpeed = 25.0f;
-
+    private bool isBurning = false;
     private void Start()
     {
         robotNoise = GetComponent<AudioSource>();
@@ -47,15 +54,20 @@ public class TargetingSystem : MonoBehaviour
         currentPoint = startingPoint;
         currentTransform = currentPoint.transform;
         oldPosition = gameObject.transform.position;
-
         if (disableCollision) Physics.IgnoreLayerCollision(GetLayerNumberFromMask(robotLayer), GetLayerNumberFromMask(obstacleLayer), true);
     }
 
     private void Update()
     {
         if (poweredDown) return;
+        else if (!poweredDown && !hasPoweredOn)
+        {
+            Debug.Log("print staemenet");
+            hasPoweredOn = true;
+            animator.SetTrigger("power_on");
+        } 
         alienController.canJumpScare = false;
-        playerFPSController.canMove = false;
+        //playerFPSController.canMove = false;
 
         speedPerSec = Vector3.Distance(oldPosition, transform.position) / Time.deltaTime;
         oldPosition = transform.position;
@@ -67,7 +79,7 @@ public class TargetingSystem : MonoBehaviour
         {
             alienController.freeze = true;
             ambienceSystem.SetActive(false);
-            animator.speed = 0.1f;
+            animator.speed = 0.5f;
             animator.SetBool("Attack", true);
 
             Quaternion alienRotation = Quaternion.LookRotation(transform.position - alien.transform.position);
@@ -106,7 +118,19 @@ public class TargetingSystem : MonoBehaviour
         }
         #endregion
     }
-
+    public void ActivateTheFire()
+    {
+        isBurning = !isBurning;
+        if(isBurning)
+        {
+        fireStream.SetActive(true);
+        alienMaterial.color = Color.black;
+        Debug.Log("fire activated.");
+        alienAnimator.SetTrigger("burn_to_death");
+        } else {
+            fireStream.SetActive(false);
+        }
+    }
     private bool MoveToTransform(Transform transfromToMove)
     {
         Vector3 directionToTransform = (transfromToMove.position - transform.position).normalized;
