@@ -9,6 +9,7 @@ TagManager:
   - lesserCanvas1
   - scrollbar1
   - Wander Point
+  - gameTimer
   layers:
   - Default
   - TransparentFX
