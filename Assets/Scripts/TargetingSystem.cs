@@ -13,10 +13,11 @@ public class TargetingSystem : MonoBehaviour
     public bool poweredDown = true;
     public bool hasPoweredOn = false;
     private PauseMenu menuManager;
-    public float destroyRadius = 4.0f;
+    public float destroyRadius = 8.0f;
     public LayerMask obstacleLayer;
     public LayerMask robotLayer;
     public AudioClip destroySound;
+    public AudioClip flameSound;
     public GameObject ambienceSystem;
     public GameObject startingPoint;
     public float rotationSpeed = 5.0f;
@@ -104,8 +105,8 @@ public class TargetingSystem : MonoBehaviour
 
             if (!destroyed)
             {
-                robotNoise.clip = destroySound;
-                robotNoise.PlayOneShot(robotNoise.clip);
+                // robotNoise.clip = destroySound;
+                // robotNoise.PlayOneShot(robotNoise.clip);
                 destroyed = true;
             }
 
@@ -143,10 +144,14 @@ public class TargetingSystem : MonoBehaviour
         isBurning = !isBurning;
         if(isBurning)
         {
-        fireStream.SetActive(true);
-        alienMaterial.color = Color.black;
-        Debug.Log("fire activated.");
-        alienAnimator.SetTrigger("burn_to_death");
+            alienController.isBurning = !alienController.isBurning;
+            robotNoise.clip = flameSound;
+            robotNoise.PlayOneShot(robotNoise.clip);
+
+            fireStream.SetActive(true);
+            alienMaterial.color = Color.black;
+            Debug.Log("fire activated.");
+            alienAnimator.SetTrigger("burn_to_death");
         } else {
             fireStream.SetActive(false);
         }
@@ -162,7 +167,7 @@ public class TargetingSystem : MonoBehaviour
         {
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToTransform.x, 0, directionToTransform.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
-            animator.speed = 2;
+            animator.speed = 1;
             animator.SetBool("Walking", true);
             return false;
         }

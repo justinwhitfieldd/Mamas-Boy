@@ -26,6 +26,7 @@ public class WanderingSystem : MonoBehaviour
     public float waitProb = 0.25f;
     public float gravity = 10f;
     public AudioClip[] alienNoises;
+    public AudioClip dyingSound;
     public AudioClip[] alienStepLSounds; // Array to store the left foot sound clips
     public AudioClip[] alienStepRSounds; // Array to store the right foot sound clips
     public bool disableCollision = false;
@@ -35,7 +36,7 @@ public class WanderingSystem : MonoBehaviour
     public GameObject currentPoint;
     public bool freeze = false;
     public bool canJumpScare = true;
-
+    public bool isBurning = false;
     private PauseMenu menuManager;
     private CharacterController characterController;
     private Animator animator;
@@ -74,6 +75,12 @@ public class WanderingSystem : MonoBehaviour
 
     private void Update()
     {
+        if(isBurning)
+        {
+                alienNoise.clip = jumpScareSound;
+                alienNoise.PlayOneShot(alienNoise.clip);
+                isBurning = false;
+        }
         if (freeze)
         {
             animator.SetBool("Walking", false);
