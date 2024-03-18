@@ -12,6 +12,7 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] public Camera focusCamera; // Reference to the new camera you want to switch to
     public GameObject WinScene;
     public GameObject WinMenu;
+    public GameObject WinMenu_MainMenuButton;
     public GameObject LoseMenu;
     private FPSController playerFPSController;
     public GameObject player;
@@ -74,6 +75,7 @@ public class PauseMenu : MonoBehaviour
         playerFPSController.canMove = false;
         WinMenu.SetActive(true);
         audioSource.PlayOneShot(win_sound);
+        turnOnMainMenuButton(5f);
     }
 
     public void GameOverLose()
@@ -86,5 +88,10 @@ public class PauseMenu : MonoBehaviour
     public void GoToMainMenu()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+    }
+    private IEnumerator turnOnMainMenuButton(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        WinMenu_MainMenuButton.SetActive(true);
     }
 }
