@@ -1045,6 +1045,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  playerFollower: {fileID: 0}
+  targetInterval: 10
   runSpeed: 2.25
   jumpPower: 7
   jumpScareRadius: 3
@@ -1056,13 +1058,16 @@ MonoBehaviour:
   interactableLayer:
     serializedVersion: 2
     m_Bits: 64
+  decorumLayer:
+    serializedVersion: 2
+    m_Bits: 8192
   alienLayer:
     serializedVersion: 2
     m_Bits: 256
   jumpScareSound: {fileID: 8300000, guid: 90193aea4420fd64b97a422f3d4e665a, type: 3}
   jumpScareAmbiance: {fileID: 1804157136573188254}
   ambienceSystem: {fileID: 0}
-  startingPoint: {fileID: 0}
+  startingPoints: []
   rotationSpeed: 5
   waitTimer: 2.5
   waitProb: 0.25
@@ -1075,6 +1080,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 77118ec812faba44fa4e2db1e5ea77c2, type: 3}
   - {fileID: 8300000, guid: 021acecda98baed429aa23d24266fc70, type: 3}
   - {fileID: 8300000, guid: 34db754cd97e60c44be69560b0ae80cc, type: 3}
+  dyingSound: {fileID: 0}
   alienStepLSounds: []
   alienStepRSounds: []
   disableCollision: 0
@@ -1084,6 +1090,8 @@ MonoBehaviour:
   currentPoint: {fileID: 0}
   freeze: 0
   canJumpScare: 1
+  isBurning: 0
+  willTarget: 1
 --- !u!82 &6449665144426723230
 AudioSource:
   m_ObjectHideFlags: 0

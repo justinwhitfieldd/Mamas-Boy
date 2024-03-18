@@ -3,20 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.Rendering;
 using Unity.VisualScripting;
+using UnityEngine.AI;
 //using UnityEditor.Experimental.GraphView;
 
 public class WanderingSystem : MonoBehaviour
 {
     public GameObject player;
+    public GameObject playerFollower;
     public int targetInterval = 10;
     public float runSpeed = 2.25f;
-    public float jumpPower = 7f;
     public float jumpScareRadius = 2.0f;
     public float alienFOV = 25f;
     public float triggerRadius = 8.0f;
-    public float chargeCooldown = 2.5f;
     public LayerMask obstacleLayer;
     public LayerMask interactableLayer;
+    public LayerMask decorumLayer;
     public LayerMask alienLayer;
     public AudioClip jumpScareSound;
     public GameObject jumpScareAmbiance;
@@ -58,7 +59,7 @@ public class WanderingSystem : MonoBehaviour
     private float speedTimer = 0.0f;
     private AudioSource jumpScareNoise;
     private int targetValue = 0;
-    public float chargeCooldownTimer = 0.0f;
+    private NavMeshAgent followerAgent;
 
     private void Start()
     {
@@ -72,12 +73,16 @@ public class WanderingSystem : MonoBehaviour
         transform.position = currentPoint.transform.position;
         oldPosition = gameObject.transform.position;
         jumpScareNoise = jumpScareAmbiance.GetComponent<AudioSource>();
+        followerAgent = playerFollower.GetComponent<NavMeshAgent>();
 
         if (disableCollision) Physics.IgnoreLayerCollision(GetLayerNumberFromMask(alienLayer), GetLayerNumberFromMask(obstacleLayer), true);
+        if (disableCollision) Physics.IgnoreLayerCollision(GetLayerNumberFromMask(alienLayer), GetLayerNumberFromMask(interactableLayer), true);
+        if (disableCollision) Physics.IgnoreLayerCollision(GetLayerNumberFromMask(alienLayer), GetLayerNumberFromMask(decorumLayer), true);
     }
 
     private void Update()
     {
+        // followerAgent.destination = player.transform.position;
         if(isBurning)
         {
                 alienNoise.clip = jumpScareSound;
@@ -88,12 +93,6 @@ public class WanderingSystem : MonoBehaviour
         {
             animator.SetBool("Walking", false);
             return;
-        }
-
-
-        if (chargeCooldownTimer > 0.0f)
-        {
-            chargeCooldownTimer -= Time.deltaTime;
         }
 
         speedPerSec = Vector3.Distance(oldPosition, transform.position) / Time.deltaTime;
@@ -108,6 +107,7 @@ public class WanderingSystem : MonoBehaviour
         #region Handles Jump Scaring Player
         if (canJumpScare && ((visible && (distanceToPlayer < jumpScareRadius)) || isEating))
         {
+            SetCollision(true);
             ambienceSystem.SetActive(false);
             animator.SetBool("Takedown", true);
 
@@ -144,13 +144,15 @@ public class WanderingSystem : MonoBehaviour
 
         #region Handles Charging to Player
 
-        if ((chargeCooldownTimer <= 0.0f) && (canJumpScare && (visible && ((angleToPlayer < alienFOV) || (distanceToPlayer < triggerRadius)))))
+        if (canJumpScare && (visible && ((angleToPlayer < alienFOV) || (distanceToPlayer < triggerRadius))))
         {
-            bool atPlayer = MoveToTransform(player.transform, runSpeed);
+            followerAgent.enabled = true;
+            followerAgent.destination = player.transform.position;
+            bool atPlayer = MoveToTransform(playerFollower.transform, runSpeed, true);
             if ((speedPerSec < 1.0f) && characterController.isGrounded)
             {
-                Debug.LogWarning("Object in way of charge! Jumping.");
-                moveDirection.y = jumpPower;
+                Debug.LogWarning("Alien stopped moving. Disabling collision.");
+                SetCollision(false);
             }
 
             if (!playerSeen)
@@ -165,12 +167,13 @@ public class WanderingSystem : MonoBehaviour
         }
         else
         {
+            playerFollower.transform.position = new Vector3(transform.position.x, transform.position.y + 1, transform.position.z);
+            followerAgent.enabled = false;
             if (playerSeen)
             {
                 currentPoint = GetClosestWanderPoint(transform, true);
                 willTarget = true;
                 targetInterval = 0;
-                chargeCooldownTimer = chargeCooldown;
                 MakeNoise();
                 jumpScareNoise.enabled = false;
             }
@@ -180,7 +183,7 @@ public class WanderingSystem : MonoBehaviour
 
         #region Handles Wandering to Points
 
-        bool atTransform = MoveToTransform(currentPoint.transform, 1f);
+        bool atTransform = MoveToTransform(currentPoint.transform, 1f, false);
 
         if (atTransform)
         {
@@ -212,7 +215,7 @@ public class WanderingSystem : MonoBehaviour
         #endregion
     }
 
-    private bool MoveToTransform(Transform transfromToMove, float speed)
+    private bool MoveToTransform(Transform transfromToMove, float speed, bool dontStop)
     {
         Vector3 directionToTransform = (transfromToMove.position - transform.position).normalized;
         Vector2 flatPosition = new Vector2(transform.position.x, transform.position.z);
@@ -226,11 +229,13 @@ public class WanderingSystem : MonoBehaviour
             if (!characterController.isGrounded) moveDirection.y -= gravity;
             characterController.Move(moveDirection);
             animator.speed = speed;
-            animator.SetBool("Walking", (directionToTransform.magnitude > 0));
+            if (!dontStop) animator.SetBool("Walking", (directionToTransform.magnitude > 0));
+            else animator.SetBool("Walking", true);
             return false;
         }
 
-        if (isStopping) animator.SetBool("Walking", false);
+        if (!dontStop) if (isStopping) animator.SetBool("Walking", false);
+        else animator.SetBool("Walking", true);
 
         return true;
     }
@@ -312,6 +317,8 @@ public class WanderingSystem : MonoBehaviour
     private void SetCollision(bool doCollision)
     {
         if (!disableCollision) Physics.IgnoreLayerCollision(GetLayerNumberFromMask(alienLayer), GetLayerNumberFromMask(obstacleLayer), !doCollision);
+        if (!disableCollision) Physics.IgnoreLayerCollision(GetLayerNumberFromMask(alienLayer), GetLayerNumberFromMask(interactableLayer), !doCollision);
+        if (!disableCollision) Physics.IgnoreLayerCollision(GetLayerNumberFromMask(alienLayer), GetLayerNumberFromMask(decorumLayer), !doCollision);
     }
 
     private void MakeNoise()
