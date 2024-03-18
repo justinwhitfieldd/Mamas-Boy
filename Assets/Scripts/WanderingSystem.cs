@@ -20,7 +20,7 @@ public class WanderingSystem : MonoBehaviour
     public AudioClip jumpScareSound;
     public GameObject jumpScareAmbiance;
     public GameObject ambienceSystem;
-    public GameObject startingPoint;
+    public GameObject[] startingPoints;
     public float rotationSpeed = 5.0f;
     public float waitTimer = 2.5f;
     public float waitProb = 0.25f;
@@ -64,7 +64,8 @@ public class WanderingSystem : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         playerFPSController = player.GetComponent<FPSController>();
-        currentPoint = startingPoint;
+        currentPoint = startingPoints[Random.Range(0, startingPoints.Length)];
+        transform.position = currentPoint.transform.position;
         oldPosition = gameObject.transform.position;
         jumpScareNoise = jumpScareAmbiance.GetComponent<AudioSource>();
 
