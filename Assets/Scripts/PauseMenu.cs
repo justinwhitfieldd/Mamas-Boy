@@ -8,6 +8,9 @@ public class PauseMenu : MonoBehaviour
 {
     public static bool Paused = false;
     public GameObject PauseMenuCanvas;
+    [SerializeField] public Camera playerCamera; // Reference to the player's current camera
+    [SerializeField] public Camera focusCamera; // Reference to the new camera you want to switch to
+    public GameObject WinScene;
     public GameObject WinMenu;
     public GameObject LoseMenu;
     private FPSController playerFPSController;
@@ -64,6 +67,10 @@ public class PauseMenu : MonoBehaviour
 
     public void GameOverWin()
     {
+        WinScene.SetActive(true);
+        playerCamera.gameObject.SetActive(false);
+        focusCamera.gameObject.SetActive(true);
+        playerFPSController.UpdateCameraReference(focusCamera);
         playerFPSController.canMove = false;
         WinMenu.SetActive(true);
         audioSource.PlayOneShot(win_sound);
