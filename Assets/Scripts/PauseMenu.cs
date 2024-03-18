@@ -30,8 +30,6 @@ public class PauseMenu : MonoBehaviour
         {
             if (Paused)
             {
-                if(!playerFPSController.isInteracting) playerFPSController.canMove = true;
-                AudioListener.pause = false;
                 Play();
             }
             else
@@ -53,6 +51,8 @@ public class PauseMenu : MonoBehaviour
 
     public void Play()
     {
+        AudioListener.pause = false;
+        if(!playerFPSController.isInteracting) playerFPSController.canMove = true;
         AudioListener.pause = false;
         PauseMenuCanvas.SetActive(false);
         Time.timeScale = 1f;
