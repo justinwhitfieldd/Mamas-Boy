@@ -135,7 +135,7 @@ public class ProjectorTask : MonoBehaviour, IInteractable
             if (canInteract)
             {
                 // Hide the UI panel
-                _interactionPromptUI.SetUp("Allign Control Vectors (E)");
+                _interactionPromptUI.SetUp("Reboot Oxygen Scrubber (Press E)");
                 interacting = true;
             }
             else

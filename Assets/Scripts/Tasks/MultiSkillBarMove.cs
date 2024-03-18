@@ -55,11 +55,13 @@ private IEnumerator AppearAndDisappear()
             if ((SkillTime > 0.11) && (SkillTime < 0.14))
             {
                 specialCount += 4f;
+                winSound.Play();
             }
             // 2nd hit
             else if ((SkillTime > 0.22) && (SkillTime < 0.25))
             {
                 specialCount += 0.7f;
+                winSound.Play();
             }
             // 3rd hit
             else if ((SkillTime > 0.28) && (SkillTime < 0.31))
