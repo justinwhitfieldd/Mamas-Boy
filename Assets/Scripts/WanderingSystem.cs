@@ -17,6 +17,7 @@ public class WanderingSystem : MonoBehaviour
     public LayerMask interactableLayer;
     public LayerMask alienLayer;
     public AudioClip jumpScareSound;
+    public GameObject jumpScareAmbiance;
     public GameObject ambienceSystem;
     public GameObject startingPoint;
     public float rotationSpeed = 5.0f;
@@ -33,6 +34,7 @@ public class WanderingSystem : MonoBehaviour
     public GameObject currentPoint;
     public bool freeze = false;
     public bool canJumpScare = true;
+
     private PauseMenu menuManager;
     private CharacterController characterController;
     private Animator animator;
@@ -50,6 +52,7 @@ public class WanderingSystem : MonoBehaviour
     private bool obstacleVisible = true;
     private bool interactableVisible = true;
     private float speedTimer = 0.0f;
+    private AudioSource jumpScareNoise;
 
     private void Start()
     {
@@ -62,6 +65,7 @@ public class WanderingSystem : MonoBehaviour
         currentPoint = startingPoint;
         currentTransform = currentPoint.transform;
         oldPosition = gameObject.transform.position;
+        jumpScareNoise = jumpScareAmbiance.GetComponent<AudioSource>();
 
         if (disableCollision) Physics.IgnoreLayerCollision(GetLayerNumberFromMask(alienLayer), GetLayerNumberFromMask(obstacleLayer), true);
     }
@@ -112,6 +116,7 @@ public class WanderingSystem : MonoBehaviour
             {
                 alienNoise.clip = jumpScareSound;
                 alienNoise.PlayOneShot(alienNoise.clip);
+                jumpScareNoise.enabled = false;
                 jumpScared = true;
             }
 
@@ -133,6 +138,7 @@ public class WanderingSystem : MonoBehaviour
             if (!playerSeen)
             {
                 MakeNoise();
+                jumpScareNoise.enabled = true;
                 Debug.Log("Player seen! Starting charge.");
             }
             playerSeen = true;
@@ -145,6 +151,7 @@ public class WanderingSystem : MonoBehaviour
             {
                 currentTransform = GetClosestWanderPoint();
                 MakeNoise();
+                jumpScareNoise.enabled = false;
             }
             playerSeen = false;
         }
