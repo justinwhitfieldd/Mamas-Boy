@@ -17,6 +17,7 @@ public class ProjectorTask : MonoBehaviour, IInteractable
     [SerializeField] private bool canInteract = true; // Flag to control if interaction is allowed
     [SerializeField] private float maxInteractDistance = 4f; // Maximum distance for interaction
     [SerializeField] private string _interactionPrompt;
+    [SerializeField] public GameObject thisPressECanvas;
 
     public string InteractionPrompt
     {
@@ -49,6 +50,7 @@ public class ProjectorTask : MonoBehaviour, IInteractable
         }
 
         Wins = 0;
+        thisPressECanvas.gameObject.SetActive(false);
 
         // Stop player
         StopFPSmovement();
