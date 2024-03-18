@@ -275,6 +275,7 @@ public class WanderingSystem : MonoBehaviour
     {
         alienNoise.clip = alienNoises[Random.Range(0, alienNoises.Length)];
         alienNoise.PlayOneShot(alienNoise.clip);
+
     }
 
     public void MakeFootStep(int isLeft)
