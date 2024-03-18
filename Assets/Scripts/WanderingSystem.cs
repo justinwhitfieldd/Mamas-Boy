@@ -24,8 +24,8 @@ public class WanderingSystem : MonoBehaviour
     public float waitProb = 0.25f;
     public float gravity = 10f;
     public AudioClip[] alienNoises;
-    public AudioClip alienStepL;
-    public AudioClip alienStepR;
+    public AudioClip[] alienStepLSounds; // Array to store the left foot sound clips
+    public AudioClip[] alienStepRSounds; // Array to store the right foot sound clips
     public bool disableCollision = false;
     public GameObject alienHead;
     public bool isEating = false;
@@ -33,7 +33,7 @@ public class WanderingSystem : MonoBehaviour
     public GameObject currentPoint;
     public bool freeze = false;
     public bool canJumpScare = true;
-
+    private PauseMenu menuManager;
     private CharacterController characterController;
     private Animator animator;
     private Transform currentTransform;
@@ -53,6 +53,8 @@ public class WanderingSystem : MonoBehaviour
 
     private void Start()
     {
+        GameObject pauseMenuObject = GameObject.Find("MenuManager");
+        menuManager = pauseMenuObject.GetComponent<PauseMenu>();
         alienNoise = GetComponent<AudioSource>();
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
@@ -278,12 +280,24 @@ public class WanderingSystem : MonoBehaviour
     public void MakeFootStep(int isLeft)
     {
         if (isLeft == 1)
-            alienNoise.clip = alienStepL;
+        {
+            // Randomly select a sound clip from the left foot sounds array
+            int randomIndex = Random.Range(0, alienStepLSounds.Length);
+            alienNoise.clip = alienStepLSounds[randomIndex];
+        }
         else
-            alienNoise.clip = alienStepR;
+        {
+            // Randomly select a sound clip from the right foot sounds array
+            int randomIndex = Random.Range(0, alienStepRSounds.Length);
+            alienNoise.clip = alienStepRSounds[randomIndex];
+        }
+        
         alienNoise.PlayOneShot(alienNoise.clip);
     }
-
+    public void loseGame()
+    {
+        menuManager.GameOverLose();
+    }
     private int GetLayerNumberFromMask(LayerMask layerMask)
     {
         int layerIndex = -1;

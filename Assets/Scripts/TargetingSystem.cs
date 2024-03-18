@@ -12,7 +12,7 @@ public class TargetingSystem : MonoBehaviour
     public GameObject player;
     public bool poweredDown = true;
     public bool hasPoweredOn = false;
-
+    private PauseMenu menuManager;
     public float speed = 10f;
     public float destroyRadius = 4.0f;
     public LayerMask obstacleLayer;
@@ -46,6 +46,15 @@ public class TargetingSystem : MonoBehaviour
     private bool isBurning = false;
     private void Start()
     {
+        // bad code but dont delete
+        float r = 190f / 255f;
+        float g = 190f / 255f;
+        float b = 190f / 255f;
+        Color color = new Color(r, g, b);
+        alienMaterial.color = color;
+        //
+        GameObject pauseMenuObject = GameObject.Find("MenuManager");
+        menuManager = pauseMenuObject.GetComponent<PauseMenu>();
         robotNoise = GetComponent<AudioSource>();
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
@@ -181,6 +190,10 @@ public class TargetingSystem : MonoBehaviour
         else
             robotNoise.clip = robotStepR;
         robotNoise.PlayOneShot(robotNoise.clip);
+    }
+    public void winGame()
+    {
+        menuManager.GameOverWin();
     }
 
     private int GetLayerNumberFromMask(LayerMask layerMask)

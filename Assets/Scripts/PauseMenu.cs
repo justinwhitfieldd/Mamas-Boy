@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using System;
 public class PauseMenu : MonoBehaviour
 {
     public static bool Paused = false;
     public GameObject PauseMenuCanvas;
+    public GameObject WinMenu;
+    public GameObject LoseMenu;
     private FPSController playerFPSController;
     public GameObject player;
 
@@ -24,14 +26,14 @@ public class PauseMenu : MonoBehaviour
         {
             if(Paused)
             {
-                AudioListener.pause = false;
                 playerFPSController.canMove = true;
+                AudioListener.pause = false;
                 Play();
             }
             else
             {
-                AudioListener.pause = true; // Pause audio
                 playerFPSController.canMove = false;
+                AudioListener.pause = true; // Pause audio
                 Stop();
             }
         }
@@ -51,8 +53,39 @@ public class PauseMenu : MonoBehaviour
         PauseMenuCanvas.SetActive(false);
         Time.timeScale = 1f;
         Paused = false;
+
+        // Force the game window to regain focus
+        System.Threading.Thread.Sleep(100); // Small delay to ensure the window is ready
+        SetFocus();
     }
 
+    private void SetFocus()
+    {
+        #if !UNITY_EDITOR
+            Type type = Type.GetType("UnityEngine.GUIUtility, UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null");
+            if (type != null)
+            {
+                type.GetMethod("ForceFocusOnGameView", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).Invoke(null, null);
+            }
+        #endif
+    }
+
+    public void GameOverWin()
+    {
+        playerFPSController.canMove = false;
+        AudioListener.pause = true;
+        WinMenu.SetActive(true);
+        Time.timeScale = 0f;
+        Paused = true;
+    }
+    public void GameOverLose()
+    {
+        playerFPSController.canMove = false;
+        AudioListener.pause = true;
+        LoseMenu.SetActive(true);
+        Time.timeScale = 0f;
+        Paused = true;
+    }
     public void GoToMainMenu()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
