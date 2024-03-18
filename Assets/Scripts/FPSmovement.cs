@@ -14,7 +14,7 @@ public class FPSController : MonoBehaviour
     public float lookSpeed = 2f;
     public float lookXLimit = 45f;
     public CharacterController characterController;
-
+    public bool isInteracting = false;
     // View bobbing variables
     public float walkingBobbingSpeed = 14f;
     public float bobbingAmount = 0.05f;

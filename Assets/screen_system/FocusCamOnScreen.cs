@@ -31,6 +31,7 @@ public class FocusCamOnScreen : MonoBehaviour, IInteractable
         if(isFocus)
         {
             // Switch to the focus camera
+            fpsController.isInteracting = true;
             fpsController.EnableFPSControl(false);
             Debug.Log("Switching to focus camera.");
             playerCamera.gameObject.SetActive(false);
@@ -40,6 +41,7 @@ public class FocusCamOnScreen : MonoBehaviour, IInteractable
         else
         {
             // Switch back to the player's camera
+            fpsController.isInteracting = false;
             fpsController.EnableFPSControl(true);
             Debug.Log("Switching to player camera.");
             focusCamera.gameObject.SetActive(false);
