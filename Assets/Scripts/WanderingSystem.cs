@@ -14,6 +14,7 @@ public class WanderingSystem : MonoBehaviour
     public float jumpScareRadius = 2.0f;
     public float alienFOV = 25f;
     public float triggerRadius = 8.0f;
+    public float chargeCooldown = 2.5f;
     public LayerMask obstacleLayer;
     public LayerMask interactableLayer;
     public LayerMask alienLayer;
@@ -37,6 +38,8 @@ public class WanderingSystem : MonoBehaviour
     public bool freeze = false;
     public bool canJumpScare = true;
     public bool isBurning = false;
+    public bool willTarget = true;
+
     private PauseMenu menuManager;
     private CharacterController characterController;
     private Animator animator;
@@ -55,7 +58,7 @@ public class WanderingSystem : MonoBehaviour
     private float speedTimer = 0.0f;
     private AudioSource jumpScareNoise;
     private int targetValue = 0;
-    private bool willTarget = false;
+    public float chargeCooldownTimer = 0.0f;
 
     private void Start()
     {
@@ -85,6 +88,12 @@ public class WanderingSystem : MonoBehaviour
         {
             animator.SetBool("Walking", false);
             return;
+        }
+
+
+        if (chargeCooldownTimer > 0.0f)
+        {
+            chargeCooldownTimer -= Time.deltaTime;
         }
 
         speedPerSec = Vector3.Distance(oldPosition, transform.position) / Time.deltaTime;
@@ -135,7 +144,7 @@ public class WanderingSystem : MonoBehaviour
 
         #region Handles Charging to Player
 
-        if (canJumpScare && (visible && ((angleToPlayer < alienFOV) || (distanceToPlayer < triggerRadius))))
+        if ((chargeCooldownTimer <= 0.0f) && (canJumpScare && (visible && ((angleToPlayer < alienFOV) || (distanceToPlayer < triggerRadius)))))
         {
             bool atPlayer = MoveToTransform(player.transform, runSpeed);
             if ((speedPerSec < 1.0f) && characterController.isGrounded)
@@ -159,6 +168,9 @@ public class WanderingSystem : MonoBehaviour
             if (playerSeen)
             {
                 currentPoint = GetClosestWanderPoint(transform, true);
+                willTarget = true;
+                targetInterval = 0;
+                chargeCooldownTimer = chargeCooldown;
                 MakeNoise();
                 jumpScareNoise.enabled = false;
             }
