@@ -1695,11 +1695,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 988de78ab3f19e04695242e1e4979994, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fireStream: {fileID: 0}
   alien: {fileID: 0}
   player: {fileID: 0}
   poweredDown: 0
-  speed: 2.17
-  destroyRadius: 4
+  hasPoweredOn: 0
+  destroyRadius: 6
   obstacleLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -1714,6 +1715,8 @@ MonoBehaviour:
   robotStepL: {fileID: 0}
   robotStepR: {fileID: 0}
   disableCollision: 0
+  alienMaterial: {fileID: 0}
+  alienAnimator: {fileID: 0}
 --- !u!143 &6028589574539367456
 CharacterController:
   m_ObjectHideFlags: 0

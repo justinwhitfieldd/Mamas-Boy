@@ -13,7 +13,6 @@ public class TargetingSystem : MonoBehaviour
     public bool poweredDown = true;
     public bool hasPoweredOn = false;
     private PauseMenu menuManager;
-    public float speed = 10f;
     public float destroyRadius = 4.0f;
     public LayerMask obstacleLayer;
     public LayerMask robotLayer;
@@ -85,9 +84,12 @@ public class TargetingSystem : MonoBehaviour
         oldPosition = transform.position;
 
         float distanceToAlien = Vector3.Distance(transform.position, alien.transform.position);
+        Vector3 directionToAlien = alien.transform.position - transform.position;
+
+        bool visible = GetVisibility(directionToAlien, distanceToAlien);
 
         #region Handles Destroying the Alien
-        if (distanceToAlien < destroyRadius)
+        if (visible && (distanceToAlien < destroyRadius))
         {
             alienController.freeze = true;
             ambienceSystem.SetActive(false);
@@ -130,6 +132,12 @@ public class TargetingSystem : MonoBehaviour
         }
         #endregion
     }
+
+    private bool GetVisibility(Vector3 direction, float distance)
+    {
+        RaycastHit hit;
+        return !Physics.Raycast(transform.position, direction.normalized, out hit, distance, obstacleLayer);
+    }
     public void ActivateTheFire()
     {
         isBurning = !isBurning;
@@ -154,9 +162,7 @@ public class TargetingSystem : MonoBehaviour
         {
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(directionToTransform.x, 0, directionToTransform.z));
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
-            moveDirection = directionToTransform * speed;
-            // if (!characterController.isGrounded) moveDirection.y -= gravity;
-            // characterController.Move(moveDirection * Time.deltaTime);
+            animator.speed = 2;
             animator.SetBool("Walking", true);
             return false;
         }
