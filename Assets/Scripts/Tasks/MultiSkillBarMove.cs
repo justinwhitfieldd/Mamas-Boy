@@ -104,6 +104,7 @@ private IEnumerator AppearAndDisappear()
         {
             taskFailed = true;
             gameObject.SetActive(false);
+            loseSound.Play();
             yield break; // Exit the coroutine
         }
 

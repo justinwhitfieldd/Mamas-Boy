@@ -143,6 +143,7 @@ public class ProjectorTask : MonoBehaviour, IInteractable
             else
             {
                 _interactionPromptUI.SetUp("Finished!");
+                interacting = true;
             }
         }
         // Check if player is too far away
