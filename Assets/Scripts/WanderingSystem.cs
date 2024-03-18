@@ -70,7 +70,10 @@ public class WanderingSystem : MonoBehaviour
         animator = GetComponent<Animator>();
         playerFPSController = player.GetComponent<FPSController>();
         currentPoint = startingPoints[Random.Range(0, startingPoints.Length)];
+        Debug.Log("Teleporting to " + currentPoint.name + ".");
+        characterController.enabled = false;
         transform.position = currentPoint.transform.position;
+        characterController.enabled = true;
         oldPosition = gameObject.transform.position;
         jumpScareNoise = jumpScareAmbiance.GetComponent<AudioSource>();
         followerAgent = playerFollower.GetComponent<NavMeshAgent>();
