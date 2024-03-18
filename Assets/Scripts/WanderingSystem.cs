@@ -8,6 +8,7 @@ using Unity.VisualScripting;
 public class WanderingSystem : MonoBehaviour
 {
     public GameObject player;
+    public int targetInterval = 10;
     public float runSpeed = 2.25f;
     public float jumpPower = 7f;
     public float jumpScareRadius = 2.0f;
@@ -38,7 +39,6 @@ public class WanderingSystem : MonoBehaviour
     private PauseMenu menuManager;
     private CharacterController characterController;
     private Animator animator;
-    private Transform currentTransform;
     private float timer = 0;
     private AudioSource alienNoise;
     private bool jumpScared = false;
@@ -53,6 +53,8 @@ public class WanderingSystem : MonoBehaviour
     private bool interactableVisible = true;
     private float speedTimer = 0.0f;
     private AudioSource jumpScareNoise;
+    private int targetValue = 0;
+    private bool willTarget = false;
 
     private void Start()
     {
@@ -63,7 +65,6 @@ public class WanderingSystem : MonoBehaviour
         animator = GetComponent<Animator>();
         playerFPSController = player.GetComponent<FPSController>();
         currentPoint = startingPoint;
-        currentTransform = currentPoint.transform;
         oldPosition = gameObject.transform.position;
         jumpScareNoise = jumpScareAmbiance.GetComponent<AudioSource>();
 
@@ -149,7 +150,7 @@ public class WanderingSystem : MonoBehaviour
         {
             if (playerSeen)
             {
-                currentTransform = GetClosestWanderPoint();
+                currentPoint = GetClosestWanderPoint(transform, true);
                 MakeNoise();
                 jumpScareNoise.enabled = false;
             }
@@ -159,13 +160,13 @@ public class WanderingSystem : MonoBehaviour
 
         #region Handles Wandering to Points
 
-        bool atTransform = MoveToTransform(currentTransform, 1f);
+        bool atTransform = MoveToTransform(currentPoint.transform, 1f);
 
         if (atTransform)
         {
             if (!isStopping)
             {
-                currentTransform = GetNewWanderPoint();
+                currentPoint = GetNewWanderPoint();
                 return;
             }
 
@@ -175,7 +176,7 @@ public class WanderingSystem : MonoBehaviour
             {
                 Debug.Log("Stopped to smell the roses.");
                 MakeNoise();
-                currentTransform = GetNewWanderPoint();
+                currentPoint = GetNewWanderPoint();
                 timer = 0;
             }
         }
@@ -214,7 +215,7 @@ public class WanderingSystem : MonoBehaviour
         return true;
     }
 
-    private Transform GetNewWanderPoint()
+    private GameObject GetNewWanderPoint()
     {
         float willStop = Random.Range(0.0f, 1.0f);
         if (willStop < waitProb) isStopping = true;
@@ -224,10 +225,24 @@ public class WanderingSystem : MonoBehaviour
 
         SetCollision(true);
 
+        if (!canJumpScare)
+        {
+            freeze = true;
+            return currentPoint;
+        }
+
         stepCounter++;
-        currentPoint = currentPoint.GetComponent<AccessiblePoints>().GetRandomAccessiblePoint(stepCounter);
-        Debug.Log("The alien is heading to " + currentPoint.name + ".");
-        return currentPoint.transform;
+        if (targetValue == targetInterval)
+        {
+            willTarget = !willTarget;
+            targetValue = 0;
+        }
+        else targetValue++;
+        GameObject newCurrentPoint;
+        if (willTarget) newCurrentPoint = currentPoint.GetComponent<AccessiblePoints>().GetPointClosestTo(GetClosestWanderPoint(player.transform, false));
+        else newCurrentPoint = currentPoint.GetComponent<AccessiblePoints>().GetRandomAccessiblePoint(stepCounter);
+        Debug.Log("The alien is heading to " + newCurrentPoint.name + ".");
+        return newCurrentPoint;
     }
 
     private bool GetVisibility(Vector3 direction, float distance)
@@ -240,37 +255,38 @@ public class WanderingSystem : MonoBehaviour
         return obstacleVisible && interactableVisible;
     }
 
-    private Transform GetClosestWanderPoint()
+    private GameObject GetClosestWanderPoint(Transform host, bool charging)
     {
         GameObject[] allWanderPoints = GameObject.FindGameObjectsWithTag("Wander Point");
 
         System.Array.Sort(allWanderPoints, (obj1, obj2) =>
         {
-            float distanceToObj1 = Vector3.Distance(obj1.transform.position, transform.position);
-            float distanceToObj2 = Vector3.Distance(obj2.transform.position, transform.position);
+            float distanceToObj1 = Vector3.Distance(obj1.transform.position, host.position);
+            float distanceToObj2 = Vector3.Distance(obj2.transform.position, host.position);
 
             return distanceToObj1.CompareTo(distanceToObj2);
         });
 
         foreach (GameObject wanderPoint in allWanderPoints)
         {
-            float distanceToWanderPoint = Vector3.Distance(transform.position, wanderPoint.transform.position);
-            Vector3 directionToWanderPoint = wanderPoint.transform.position - transform.position;
+            float distanceToWanderPoint = Vector3.Distance(host.position, wanderPoint.transform.position);
+            Vector3 directionToWanderPoint = wanderPoint.transform.position - host.position;
 
             bool visible = GetVisibility(directionToWanderPoint, distanceToWanderPoint);
 
             if (visible)
             {
-                Debug.Log("Player lost! The alien is heading to " + wanderPoint.name + " after charging.");
-                currentPoint = wanderPoint;
+                if (charging) Debug.Log("Player lost! The alien is heading to " + wanderPoint.name + " after charging.");
+                else Debug.Log("Alien is heading to " + wanderPoint.name + " to get closer to player.");
 
-                return wanderPoint.transform;
+                return wanderPoint;
             }
         }
 
-        Debug.LogWarning("No wander points visible! Alien is defaulting to closest non-visible point.");
+        if (charging) Debug.LogWarning("No wander points visible! Alien is defaulting to " + allWanderPoints[0].name + ".");
+        else Debug.LogWarning("Couldn't find closest visible point to player. Alien is defaulting to " + allWanderPoints[0].name + ".");
         SetCollision(false);
-        return allWanderPoints[0].transform;
+        return allWanderPoints[0];
     }
 
     private void SetCollision(bool doCollision)
