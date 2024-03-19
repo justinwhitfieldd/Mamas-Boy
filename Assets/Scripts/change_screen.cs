@@ -8,12 +8,13 @@ public class change_screen : MonoBehaviour, IInteractable
     [SerializeField] public GameObject next_screen; // Manually assiGn this in the Inspector
     [SerializeField] public GameObject current_screen_text;
     [SerializeField] public GameObject thisPressECanvas;
-    [SerializeField] public GameObject consoleCover;
+    [SerializeField] public DoorOpenClose doorToBlock;
     [SerializeField] public GameObject doorPressECanvas;
     [SerializeField] private string _interactionPrompt;
     [SerializeField] private AudioSource alarm;
     public void Start(){
         alarm.Play();
+        doorToBlock.canOpen = false;
     }
     public string InteractionPrompt
     {
@@ -25,7 +26,7 @@ public class change_screen : MonoBehaviour, IInteractable
     {
         alarm.Stop();
         Debug.Log("Switching to new screen");
-        consoleCover.gameObject.SetActive(false);
+        doorToBlock.canOpen = true;
         current_screen_text.gameObject.SetActive(false);
         thisPressECanvas.gameObject.SetActive(false);
         doorPressECanvas.gameObject.SetActive(true);
