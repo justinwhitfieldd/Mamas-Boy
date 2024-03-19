@@ -17,6 +17,7 @@ public class DoorOpenClose : MonoBehaviour
     public GameObject doorBottomA;
     public GameObject doorBottomB;
     public AudioClip doorSound;
+    public bool canOpen = true;
     private AudioSource doorNoise;
 
     private void Start()
@@ -32,12 +33,21 @@ public class DoorOpenClose : MonoBehaviour
         float distanceToAlien = Vector3.Distance(transform.position, alien.position);
         float distanceToRobot = Vector3.Distance(transform.position, robot.position);
 
-        if ((distanceToAlien < autoToggieDistane) && (!isDoorOpen)) toggie();
-        if ((distanceToRobot < autoToggieDistane) && (!isDoorOpen)) toggie();
+        if ((distanceToAlien < autoToggieDistane) && (!isDoorOpen))
+        {
+            canOpen = true;
+            toggie();
+        }
+        if ((distanceToRobot < autoToggieDistane) && (!isDoorOpen))
+        {
+            canOpen = true;
+            toggie();
+        }
     }
 
     public void toggie()
     {
+        if (!canOpen) return;
         doorNoise.PlayOneShot(doorNoise.clip);
         isDoorOpen = !isDoorOpen;
         animator.SetBool("character_nearby",isDoorOpen);
