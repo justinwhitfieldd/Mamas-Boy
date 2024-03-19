@@ -6,6 +6,7 @@ public class PlaceInCamera : MonoBehaviour
 {
     [SerializeField] private Camera mainCamera;
     private Renderer rendererComponent;
+    public Renderer rendererComponent2;
     public float distanceFromCamera = 1f;
 
     void Start()
@@ -29,12 +30,14 @@ public class PlaceInCamera : MonoBehaviour
 
         // make visable
         rendererComponent.enabled = true;
+        rendererComponent2.enabled = true;
 
     }
 
     public void DespawnforPlayer()
     {
         rendererComponent.enabled = false;
+        rendererComponent2.enabled = false;
     }
 
    

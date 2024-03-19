@@ -18,7 +18,16 @@ public class FocusCamOnScreen : MonoBehaviour, IInteractable
     }
 
     public bool isFocus = false;
-
+    public void toggleFocus()
+    {
+        isFocus = false;
+        fpsController.isInteracting = false;
+        fpsController.EnableFPSControl(true);
+        Debug.Log("Switching to player camera.");
+        focusCamera.gameObject.SetActive(false);
+        playerCamera.gameObject.SetActive(true);
+        fpsController.UpdateCameraReference(playerCamera); // Update the camera reference back to the player camera
+    }
     public bool Interact(Interactor interactor)
     {
         if (pressEcanvas != null)

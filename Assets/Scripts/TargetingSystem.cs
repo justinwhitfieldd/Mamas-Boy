@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine.Rendering;
 using Unity.VisualScripting;
 //using UnityEditor.Experimental.GraphView;
-
+using System.Collections;
 public class TargetingSystem : MonoBehaviour
 {
     public GameObject fireStream;
@@ -20,10 +20,19 @@ public class TargetingSystem : MonoBehaviour
     public AudioClip flameSound;
     public GameObject ambienceSystem;
     public GameObject startingPoint;
+    
+    public GameObject spotlight;
+    public GameObject eyelight;
+    public GameObject eyelight2;
+
     public float rotationSpeed = 5.0f;
     public float gravity = 10f;
     public AudioClip robotStepL;
     public AudioClip robotStepR;
+    public AudioClip powerOnSound;
+    public AudioClip letsCookAlien;
+    public AudioClip killAlienvoice;
+
     public bool disableCollision = false;
 
     private CharacterController characterController;
@@ -31,12 +40,13 @@ public class TargetingSystem : MonoBehaviour
 
     public Material alienMaterial;
     public Animator alienAnimator;
-
+    bool hasPlayedCookedAlien = false;
     private WanderingSystem alienController;
     private FPSController playerFPSController;
     private GameObject currentPoint;
     private Transform currentTransform;
-    private AudioSource robotNoise;
+    public AudioSource robotNoise;
+    public AudioSource robotTalk;
     private bool destroyed = false;
     private float speedPerSec = 0.0f;
     private Vector3 oldPosition;
@@ -67,16 +77,27 @@ public class TargetingSystem : MonoBehaviour
     }
     public void turnOn()
     {
-        poweredDown =false;
+        StartCoroutine(WaitAndTurnOn());
+    }
+
+    private IEnumerator WaitAndTurnOn()
+    {
+        yield return new WaitForSeconds(6f);
+        poweredDown = false;
     }
     private void Update()
     {
         if (poweredDown) return;
         else if (!poweredDown && !hasPoweredOn)
         {
+            spotlight.SetActive(true);
+            eyelight.SetActive(true);
+            eyelight2.SetActive(true);
             Debug.Log("print staemenet");
             hasPoweredOn = true;
             animator.SetTrigger("power_on");
+            robotNoise.clip = powerOnSound;
+            robotNoise.PlayOneShot(robotNoise.clip);
         } 
         alienController.canJumpScare = false;
         //playerFPSController.canMove = false;
@@ -86,7 +107,12 @@ public class TargetingSystem : MonoBehaviour
 
         float distanceToAlien = Vector3.Distance(transform.position, alien.transform.position);
         Vector3 directionToAlien = alien.transform.position - transform.position;
-
+        if(distanceToAlien < 20 && distanceToAlien > 15 && !hasPlayedCookedAlien)
+        {
+            hasPlayedCookedAlien = true;
+            robotTalk.clip = letsCookAlien;
+            robotTalk.PlayOneShot(robotTalk.clip);
+        }
         bool visible = GetVisibility(directionToAlien, distanceToAlien);
 
         #region Handles Destroying the Alien
