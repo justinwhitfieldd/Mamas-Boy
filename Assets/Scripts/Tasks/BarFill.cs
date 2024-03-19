@@ -11,7 +11,7 @@ public class BarFill : MonoBehaviour
     public bool taskFailed = false;
     public Scrollbar scrollbar;
     [SerializeField] private AudioSource winSound;
-    public float fillTime = 6f; // Adjust as needed
+    public float fillTime = 10f; // Adjust as needed
     public bool isFilling = false;
     private bool filledBar = false;
     private float elapsedTime = 0f;

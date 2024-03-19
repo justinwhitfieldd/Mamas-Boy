@@ -30,7 +30,7 @@ public class SkillBarMove : MonoBehaviour
         // Set the initial position of the object in front of the camera
         if (mainCamera != null)
         {
-            speed = Random.Range(0.28f, 0.78f);
+            speed = Random.Range(0.28f, 0.68f);
             SkillTime = 0;
             SkillTime = 0;
             Vector3 cameraPosition = mainCamera.transform.position;
